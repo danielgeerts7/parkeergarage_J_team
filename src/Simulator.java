@@ -42,11 +42,6 @@ public class Simulator {
             tick();
         }
     }
-    
-    public static void main(String[] args) {
-    	Simulator sim = new Simulator();
-    	sim.run();
-    }
 
     private void tick() {
     	advanceTime();
