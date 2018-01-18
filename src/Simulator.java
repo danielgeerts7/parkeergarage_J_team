@@ -13,12 +13,13 @@ public class Simulator {
     private CarQueue paymentCarQueue;
     private CarQueue exitCarQueue;
     private SimulatorView simulatorView;
+    private TestView testinfo;
 
     private int day = 0;
     private int hour = 0;
     private int minute = 0;
 
-    private int tickPause = 100;
+    private int tickPause = 2;
 
     int weekDayArrivals= 100; // average number of arriving cars per hour
     int weekendArrivals = 200; // average number of arriving cars per hour
@@ -35,11 +36,13 @@ public class Simulator {
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
         simulatorView = new SimulatorView(3, 6, 30);
+        testinfo = new TestView("Test view jongeh");
     }
 
     public void run() {
         for (int i = 0; i < 10000; i++) {
             tick();
+        	testinfo.updateInfo(i, this);
         }
     }
 
@@ -179,6 +182,14 @@ public class Simulator {
     private void carLeavesSpot(Car car){
     	simulatorView.removeCarAt(car.getLocation());
         exitCarQueue.addCar(car);
+    }
+    
+    public CarQueue getEntranceCarQueue() {
+    	return entranceCarQueue;
+    }
+    
+    public CarQueue getEntrancePassholdersQueue() {
+    	return entrancePassQueue;
     }
 
 }
