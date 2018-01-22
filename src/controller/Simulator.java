@@ -8,14 +8,14 @@ import model.Location;
 import model.Model;
 import model.ParkingPassCar;
 
-public class newSimulator extends AbstractController {
+public class Simulator extends AbstractController {
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	
     private int tickPause = 100;
 	
-	public newSimulator(Model model) {
+	public Simulator(Model model) {
 		super(model);
 	}
 
