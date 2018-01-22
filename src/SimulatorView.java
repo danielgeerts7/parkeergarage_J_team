@@ -1,6 +1,11 @@
 
 
+
 import javax.swing.*;
+
+import model.Car;
+import model.Location;
+
 import java.awt.*;
 
 public class SimulatorView extends JFrame {

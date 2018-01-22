@@ -1,6 +1,14 @@
 
 
+
+import java.awt.event.ActionEvent;
 import java.util.Random;
+
+import controller.CarQueue;
+import model.AdHocCar;
+import model.Car;
+import model.Location;
+import model.ParkingPassCar;
 
 public class Simulator {
 
