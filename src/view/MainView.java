@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -11,19 +14,28 @@ import model.Model;
  * @author danielgeerts7
  * @version 22-01-2018
  */
-public abstract class MainView extends JPanel {
+public class MainView extends JFrame {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected Model model;
+	private CarParkView carParkView;
 	
-	public MainView(Model model) {
-		this.model = model;
-	}
-	
-	public abstract void updateView();
+	public MainView(Model model, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
+		
+		Container contentPane = getContentPane();
+        contentPane.add(carParkView, BorderLayout.CENTER);
+        pack();
+        setVisible(true);
+
+        updateView();
+    }
+
+    public void updateView() {
+        carParkView.updateView();
+    }
 
 }

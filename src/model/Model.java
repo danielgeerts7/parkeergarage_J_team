@@ -49,8 +49,7 @@ public class Model {
     private String ApplicationTitle = "The J-Team";
     
     // All views that are used in this application
-    private ArrayList<MainView> allViews;
-    private CarParkView carParkView;
+    private MainView mainView;
     
     public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
     	entranceCarQueue = new CarQueue();
@@ -68,23 +67,14 @@ public class Model {
         // Create JFrame with title name
         frame = new JFrame(ApplicationTitle);
         
-        allViews = new ArrayList<MainView>();
-        carParkView = new CarParkView(this, numberOfFloors, numberOfRows, numberOfPlaces);
-        
-        allViews.add(carParkView);
-        
-        for (MainView view : allViews) {
-        	frame.add(view);
-	    }
+        mainView = new MainView(this, numberOfFloors, numberOfRows, numberOfPlaces);
     }
     
     /**
      *	Update every view that this application has
      */
     public void updateViews() {
-	    for (MainView view : allViews) {
-	    	view.updateView();
-	    }
+	    mainView.updateView();
     }
 	
 	public int getNumberOfCars(int weekDay, int weekend){

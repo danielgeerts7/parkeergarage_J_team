@@ -10,10 +10,12 @@ import model.Car;
 import model.Location;
 import model.Model;
 
-public class CarParkView extends MainView {
+public class CarParkView extends JPanel {
         
         private Dimension size;
         private Image carParkImage;
+        
+        private Model model;
         
         private int numberOfFloors;
         private int numberOfRows;
@@ -23,7 +25,7 @@ public class CarParkView extends MainView {
          * Constructor for objects of class CarPark
          */
         public CarParkView(Model model, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
-            super(model);
+            this.model = model;
         	size = new Dimension(0, 0);
             
             this.numberOfFloors = numberOfFloors;
