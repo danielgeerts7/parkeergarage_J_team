@@ -1,6 +1,10 @@
+package controller;
+
 
 import java.util.LinkedList;
 import java.util.Queue;
+
+import model.Car;
 
 public class CarQueue {
     private Queue<Car> queue = new LinkedList<>();
