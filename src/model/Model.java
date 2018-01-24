@@ -2,14 +2,12 @@
 package model;
 
 //import java classes
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 // import own classes
 import controller.CarQueue;
-import view.CarParkView;
 import view.MainView;
 
 /**   
@@ -48,6 +46,8 @@ public class Model {
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	
+	private int currentTick = 0;
+	
 	// Create the JFrame
 	private JFrame frame;
 	private String ApplicationTitle = "The J-Team";
@@ -71,19 +71,20 @@ public class Model {
 		// Create JFrame with title name
 		frame = new JFrame(ApplicationTitle);
 
-		mainView = new MainView(this, numberOfFloors, numberOfRows, numberOfPlaces);
-	}
-
-	/**
-	 *	Update every view that this application has
-	 */
-	public void updateViews() {
-		mainView.updateView();
+		mainView = new MainView(this, frame, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
 	
 	public void run() {
 		for (int i = 0; i < 10000; i++) {
 			tick();
+			currentTick++;
+		}
+	}
+	
+	public void tick(int amount) {
+		for (int i = 0; i < amount; i++) {
+			tick();
+			currentTick++;
 		}
 	}
 
@@ -91,7 +92,7 @@ public class Model {
 		advanceTime();
 		updateCarTime();
 		handleExit();
-		updateViews();
+		mainView.updateView();
 		// Pause.
 		try {
 			Thread.sleep(tickPause);
@@ -376,5 +377,75 @@ public class Model {
 		while (day > 6) {
 			day -= 7;
 		}
+	}
+	
+	/**
+	 * @return current Tick
+	 */
+	public int getCurrentTick() {
+		return currentTick;
+	}
+	
+	/**
+	 * This function makes the string format of the time look like we are used to know
+	 * @return complete time string
+	 */
+	public String getTime() {		
+		String completeStr = "";
+		
+		if (day < 10) {
+			completeStr += "0";
+		}
+		completeStr += day;
+		completeStr += ":";
+		if (hour < 10) {
+			completeStr += "0";
+		}
+		completeStr += hour;
+		completeStr += ":";
+		if (minute < 10) {
+			completeStr += "0";
+		}
+		completeStr += minute;
+		
+    	return completeStr;
+    }
+	
+	/**
+	 * @return amount of paying cars that are parked in the garage
+	 */
+	public int getCurrentAdHocCarsParked() {
+		int amountOfCars = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof AdHocCar) {
+						amountOfCars++;
+					}
+				}
+			}
+		}
+		return amountOfCars;
+	}
+	
+	/**
+	 * @return amount of pass holding cars that are parked in the garage
+	 */
+	public int getCurrentParkingPassCarsParked() {
+		int amountOfCars = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof ParkingPassCar) {
+						amountOfCars++;
+					}
+				}
+			}
+		}
+		return amountOfCars;
 	}
 }
