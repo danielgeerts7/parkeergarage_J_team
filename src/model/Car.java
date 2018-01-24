@@ -8,6 +8,7 @@ public abstract class Car {
 
     private Location location;
     private int minutesLeft;
+    private int minutesParked;
     private boolean isPaying;
     private boolean hasToPay;
 
@@ -15,7 +16,7 @@ public abstract class Car {
      * Constructor for objects of class Car
      */
     public Car() {
-
+    	minutesParked = 0;
     }
 
     public Location getLocation() {
@@ -51,7 +52,12 @@ public abstract class Car {
     }
 
     public void tick() {
+    	minutesParked++;
         minutesLeft--;
+    }
+    
+    public int getMinutesParked() {
+        return minutesParked;
     }
     
     public abstract Color getColor();

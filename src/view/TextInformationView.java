@@ -16,6 +16,7 @@ public class TextInformationView extends JPanel {
 	private static JLabel timeLabel, tickLabel;
 	private static JLabel currentParkedCarsLabel, currentParkedPayingCarsLabel, currentParkedPassholderCarsLabel;
 	private static JLabel carQueueLabel, carPassholderQueueLabel;
+	private static JLabel earnedMoney, expectedToBeEarnedMoney;
 	
     /**
      * Constructor for objects of class TextInformationView
@@ -32,6 +33,9 @@ public class TextInformationView extends JPanel {
     	
         carQueueLabel = new JLabel("");
         carPassholderQueueLabel = new JLabel("");
+        
+        earnedMoney = new JLabel("");
+        expectedToBeEarnedMoney = new JLabel("");
         
         GridBagConstraints c = new GridBagConstraints();
         c.ipadx = 25;
@@ -59,6 +63,13 @@ public class TextInformationView extends JPanel {
         this.add(carQueueLabel, c);
         c.gridy = 1;
         this.add(carPassholderQueueLabel, c);
+        
+        // add car Queue information
+        c.gridx = 3;
+        c.gridy = 0;
+        this.add(earnedMoney, c);
+        c.gridy = 1;
+        this.add(expectedToBeEarnedMoney, c);
     }
     
     /**
@@ -81,5 +92,12 @@ public class TextInformationView extends JPanel {
     	// Update cars in queue information
     	carQueueLabel.setText("Current cars waiting: " + model.getEntranceCarQueue().carsInQueue());
     	carPassholderQueueLabel.setText("Current pass holders waiting: " + model.getEntrancePassQueue().carsInQueue());
+    	
+    	// Information about the paying customers
+    	// Something with price and the expected price
+    	String resultEarned = String.format("%.2f",  model.getEarnedMoney());
+    	earnedMoney.setText("Earned money by paying customers: €" + resultEarned + ",-");
+    	String resultExpected = String.format("%.2f",  model.getExpectedMoneyToBeEarned());
+    	expectedToBeEarnedMoney.setText("Expected money to be earned by the current parking customers: €" + resultExpected + ",-");
     }
 }
