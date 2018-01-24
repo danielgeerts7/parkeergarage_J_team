@@ -102,7 +102,7 @@ public class Model extends Thread{
 	                   
 	                }
 	                // Tick time
-	                tick();
+	                tick(true);
 	            }
 		}
 		
@@ -119,18 +119,27 @@ public class Model extends Thread{
         }
     }
 	
-	private void tick() {
+	private void tick(boolean withSleep) {
 		advanceTime();
 		updateCarTime();
 		handleExit();
 		updateViews();
 		// Pause.
-		try {
-			Thread.sleep(tickPause);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		// the + 100 ticks function doesn't need Thread.sleep
+		if (withSleep) {
+			try {
+				Thread.sleep(tickPause);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		handleEntrance();
+	}
+	
+	public void tickHundredTimes() {
+		for (int i = 1; i <= 100; i++) {
+			tick(false);
+		}
 	}
 
 	private void updateCarTime() {
