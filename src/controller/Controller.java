@@ -2,29 +2,31 @@ package controller;
 
 import java.awt.event.ActionEvent;
 
-import model.AdHocCar;
-import model.Car;
-import model.Location;
 import model.Model;
-import model.ParkingPassCar;
 
 public class Controller extends AbstractController {
 
 	public Controller(Model model) {
 		super(model);
-		model.mainView.start.addActionListener(this);
-		model.mainView.stop.addActionListener(this);
+		model.mainView.resume.addActionListener(this);
+		model.mainView.pause.addActionListener(this);
+		model.mainView.plusHundredTicks.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Start")) {
-			
+		if (e.getActionCommand().equals("Resume")) {
+			model.resumeSimulator();
 		}
 		
-		if (e.getActionCommand().equals("Stop")) {
+		if (e.getActionCommand().equals("Pause")) {
+			model.pauseSimulator();
+		}
 		
+		if (e.getActionCommand().equals("+100 ticks")) {
+			model.pauseSimulator();
+			model.tickHundredTimes();
+			model.resumeSimulator();
 		}
 	}
-	
 }
