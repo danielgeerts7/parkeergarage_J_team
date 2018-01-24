@@ -16,7 +16,12 @@ import view.MainView;
  * @author danielgeerts7
  * @version 22-01-2018
  */
-public class Model {
+public class Model extends Thread{
+
+	public volatile boolean running = true;
+	public volatile boolean paused = false;
+	private final Object pauseLock = new Object();
+	public Thread thread;
 
 	private CarQueue entranceCarQueue;
 	private CarQueue entrancePassQueue;
@@ -74,32 +79,69 @@ public class Model {
 		mainView = new MainView(this, frame, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
 	
-	public void run() {
-		for (int i = 0; i < 10000; i++) {
-			tick();
-			currentTick++;
+
+	public void run(){
+		while (running) {
+			 synchronized (pauseLock) {
+	                if (!running) { // may have changed while waiting to synchronize on pauseLock
+	                    break;
+	                }
+	                if (paused) {
+	                    try {
+	                        pauseLock.wait(); // will cause this Thread to block until 
+	                                          // another thread calls pauseLock.notifyAll()
+	                                          // Note that calling wait() will 
+	                                          // relinquish the synchronized lock that this 
+	                                          // thread holds on pauseLock so another thread
+	                                          // can acquire the lock to call notifyAll()
+	                    } catch (InterruptedException ex) {
+	                        break;
+	                    }
+	                    if (!running) { // running might have changed since we paused
+	                        break;
+	                    }
+	                   
+	                }
+	                // Tick time
+	                tick(true);
+	            }
 		}
-	}
-	
-	public void tick(int amount) {
-		for (int i = 0; i < amount; i++) {
-			tick();
-			currentTick++;
-		}
+		
 	}
 
-	private void tick() {
+    public void pauseSimulator() {
+        paused = true;
+    }
+
+    public void resumeSimulator() {
+        synchronized (pauseLock) {
+            paused = false;
+            pauseLock.notifyAll(); // Unblocks thread
+        }
+    }
+	
+	private void tick(boolean withSleep) {
 		advanceTime();
 		updateCarTime();
 		handleExit();
 		mainView.updateView();
+		currentTick++;
 		// Pause.
-		try {
-			Thread.sleep(tickPause);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		// the + 100 ticks function doesn't need Thread.sleep
+		if (withSleep) {
+			try {
+				Thread.sleep(tickPause);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		handleEntrance();
+	}
+	
+	public void tickHundredTimes() {
+		for (int i = 1; i <= 100; i++) {
+			tick(false);
+		}
 	}
 
 	private void updateCarTime() {
@@ -376,6 +418,14 @@ public class Model {
 		}
 		while (day > 6) {
 			day -= 7;
+		}
+	}
+
+	public void pauseThread() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	

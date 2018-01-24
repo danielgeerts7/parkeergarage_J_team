@@ -21,9 +21,10 @@ public class MainView {
 	private Model model;
 	
 	private CarParkView carParkView;
-	private JPanel buttonPane;
-	public JButton start;
-	public JButton stop;
+	public JPanel buttonPane;
+	public JButton resume;
+	public JButton pause;
+	public JButton plusHundredTicks;
 	
 	private TextInformationView textInfoView;
 	
@@ -35,16 +36,17 @@ public class MainView {
 		buttonPane = new JPanel();
 		
 		textInfoView = new TextInformationView();
+		resume = new JButton("Resume");
+		pause = new JButton("Pause");
+		plusHundredTicks = new JButton("+100 ticks");
+		buttonPane.add(resume);
+		buttonPane.add(pause);
+		buttonPane.add(plusHundredTicks);
 		
 		Container contentPane = frame.getContentPane();
         contentPane.add(carParkView, BorderLayout.CENTER);
         contentPane.add(buttonPane, BorderLayout.SOUTH);
         contentPane.add(textInfoView, BorderLayout.NORTH);
-        
-        start = new JButton("Start");
-		stop = new JButton("Stop");
-		buttonPane.add(start);
-		buttonPane.add(stop);
         
         frame.pack();
         frame.setVisible(true);
