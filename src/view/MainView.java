@@ -20,22 +20,21 @@ public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private CarParkView carParkView;
 	private JPanel buttonPane;
-	public JButton start;
-	public JButton stop;
+	public JButton resume;
+	public JButton pause;
 	
 	public MainView(Model model, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
 		buttonPane = new JPanel();
 		
-		
 		Container contentPane = getContentPane();
         contentPane.add(carParkView, BorderLayout.CENTER);
         contentPane.add(buttonPane, BorderLayout.SOUTH);
         
-        start = new JButton("Start");
-		stop = new JButton("Stop");
-		buttonPane.add(start);
-		buttonPane.add(stop);
+        resume = new JButton("Resume");
+		pause = new JButton("Pause");
+		buttonPane.add(resume);
+		buttonPane.add(pause);
         
         pack();
         setVisible(true);
