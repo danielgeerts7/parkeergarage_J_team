@@ -114,10 +114,12 @@ public class Model extends Thread{
     }
 
     public void resumeSimulator() {
-        synchronized (pauseLock) {
-            paused = false;
-            pauseLock.notifyAll(); // Unblocks thread
-        }
+    	if (paused) {
+    		synchronized (pauseLock) {
+	            paused = false;
+	            pauseLock.notifyAll(); // Unblocks thread
+	        }
+    	}
     }
 	
 	private void tick(boolean withSleep) {
