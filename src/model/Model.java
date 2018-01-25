@@ -52,6 +52,10 @@ public class Model extends Thread{
 	private static final String PASS = "2";
 	
 	private int currentTick = 0;
+	private double priceToPayPerMinuteWhenParked = 0.1;
+	
+	private int moneyMade = 0;
+	private int expectedMoneyToBeMade = 0;
 	
 	// Create the JFrame
 	private JFrame frame;
@@ -126,6 +130,7 @@ public class Model extends Thread{
 		advanceTime();
 		updateCarTime();
 		handleExit();
+		calculateMoney();
 		mainView.updateView();
 		currentTick++;
 		// Pause.
@@ -171,6 +176,21 @@ public class Model extends Thread{
 		carsPaying();
 		carsLeaving();
 	}
+	
+	private void calculateMoney() {
+		expectedMoneyToBeMade = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof AdHocCar) {
+						expectedMoneyToBeMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
+					}
+				}
+			}
+		}
+	}
 
 	private void carsArriving(){
 		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals());
@@ -212,6 +232,7 @@ public class Model extends Thread{
 		while (getPaymentCarQueue().carsInQueue()>0 && i < getPaymentSpeed()){
 			Car car = getPaymentCarQueue().removeCar();
 			// TODO Handle payment.
+			moneyMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
 			carLeavesSpot(car);
 			i++;
 		}
@@ -436,6 +457,20 @@ public class Model extends Thread{
 	 */
 	public int getCurrentTick() {
 		return currentTick;
+	}
+	
+	/**
+	 * @return all the money that the paying customers have payed
+	 */
+	public double getEarnedMoney() {
+		return moneyMade;
+	}
+	
+	/**
+	 * @return all the money that the paying customers yet have to pay before leaving the parking garage
+	 */
+	public double getExpectedMoneyToBeEarned() {
+		return expectedMoneyToBeMade;
 	}
 	
 	/**
