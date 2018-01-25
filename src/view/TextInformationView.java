@@ -23,6 +23,7 @@ public class TextInformationView extends JPanel {
      */
     public TextInformationView() {
         super(new GridBagLayout());
+        setBackground(Color.CYAN);
         
         timeLabel = new JLabel("");
         tickLabel = new JLabel("");
