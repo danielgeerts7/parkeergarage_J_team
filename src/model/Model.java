@@ -1,6 +1,7 @@
 // define package name
 package model;
 
+import java.awt.Color;
 //import java classes
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,6 +12,7 @@ import javax.swing.JFrame;
 import controller.CarQueue;
 import view.CarParkView;
 import view.MainView;
+import view.PieSlice;
 
 /**   
  * explain here what this class does
@@ -23,7 +25,6 @@ public class Model extends Thread{
 	public volatile boolean running = true;
 	public volatile boolean paused = false;
 	private final Object pauseLock = new Object();
-	public Thread thread;
 
 	private CarQueue entranceCarQueue;
 	private CarQueue entrancePassQueue;
@@ -65,8 +66,8 @@ public class Model extends Thread{
 		this.numberOfFloors = numberOfFloors;
 		this.numberOfRows = numberOfRows;
 		this.numberOfPlaces = numberOfPlaces;
-
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
+		
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
 
 		mainView = new MainView(this, numberOfFloors, numberOfRows, numberOfPlaces);
@@ -123,6 +124,7 @@ public class Model extends Thread{
 		advanceTime();
 		updateCarTime();
 		handleExit();
+		setPieChart();
 		updateViews();
 		// Pause.
 		// the + 100 ticks function doesn't need Thread.sleep
@@ -135,7 +137,7 @@ public class Model extends Thread{
 		}
 		handleEntrance();
 	}
-	
+
 	public void tickHundredTimes() {
 		for (int i = 1; i <= 100; i++) {
 			tick(false);
@@ -321,7 +323,14 @@ public class Model extends Thread{
 		double numberOfCarsPerHour = averageNumberOfCarsPerHour + random.nextGaussian() * standardDeviation;
 		return (int)Math.round(numberOfCarsPerHour / 60);	
 	}
-
+	
+	private void setPieChart() {
+		
+		mainView.subscribersPieChart.slices.clear();
+		mainView.subscribersPieChart.addPieSlice(getCurrentCarsWithClass(AdHocCar.class), Color.RED);
+		mainView.subscribersPieChart.addPieSlice(getCurrentCarsWithClass(ParkingPassCar.class), Color.BLUE);
+		
+	}
 
 	public int getNumberOfFloors() {
 		return numberOfFloors;
@@ -425,5 +434,24 @@ public class Model extends Thread{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return amount of paying cars that are parked in the garage
+	 */
+	public int getCurrentCarsWithClass(Class<?> cls) {
+		int amountOfCars = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && cls.isInstance(car)) {
+						amountOfCars++;
+					}
+				}
+			}
+		}
+		return amountOfCars;
 	}
 }

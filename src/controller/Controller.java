@@ -1,8 +1,10 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 
 import model.Model;
+import view.PieSlice;
 
 public class Controller extends AbstractController {
 
