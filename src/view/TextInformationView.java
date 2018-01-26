@@ -94,11 +94,13 @@ public class TextInformationView extends JPanel {
     	carQueueLabel.setText("Current cars waiting: " + model.getEntranceCarQueue().carsInQueue());
     	carPassholderQueueLabel.setText("Current pass holders waiting: " + model.getEntrancePassQueue().carsInQueue());
     	
+    	String euroSign = "\u20ac";
+    	
     	// Information about the paying customers
     	// Something with price and the expected price
     	String resultEarned = String.format("%.2f",  model.getEarnedMoney());
-    	earnedMoney.setText("Earned money by paying customers: €" + resultEarned + ",-");
+    	earnedMoney.setText("Earned money by paying customers: " + euroSign + resultEarned + ",-");
     	String resultExpected = String.format("%.2f",  model.getExpectedMoneyToBeEarned());
-    	expectedToBeEarnedMoney.setText("Expected money to be earned by the current parking customers: €" + resultExpected + ",-");
+    	expectedToBeEarnedMoney.setText("Expected money to be earned by the current parking customers: " + euroSign + resultExpected + ",-");
     }
 }
