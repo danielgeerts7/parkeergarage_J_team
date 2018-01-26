@@ -42,7 +42,9 @@ public class Model extends Thread{
 	int weekendArrivals = 200; // average number of arriving cars per hour
 	int weekDayPassArrivals= 50; // average number of arriving cars per hour
 	int weekendPassArrivals = 5; // average number of arriving cars per hour
-
+	
+	
+	
 	private int numberOfFloors;
 	private int numberOfRows;
 	private int numberOfPlaces;
@@ -169,11 +171,28 @@ public class Model extends Thread{
 	}
 
 	private void carsArriving(){
-		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals());
+		//System.out.println(qModifier + " " + entranceCarQueue.carsInQueue());
+		
+		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals()) * (enactModifier(entranceCarQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, AD_HOC);
-
-		numberOfCars = getNumberOfCars(getWeekDayPassArrivals(), getWeekendPassArrivals());
+		
+		numberOfCars = getNumberOfCars(getWeekDayPassArrivals(), getWeekendPassArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, PASS);
+	}
+	
+	private int enactModifier(int q) {
+		if (q > 15) {
+			return 0;
+		}
+		if(q > 12) {
+			return 25;
+		}
+		if (q > 10)
+		return 50;
+		
+		else{
+			return 100;
+		}
 	}
 
 	private void carsEntering(CarQueue queue){
@@ -232,7 +251,7 @@ public class Model extends Thread{
 			break;
 		case PASS:
 			for (int i = 0; i < numberOfCars; i++) {
-				getEntranceCarQueue().addCar(new ParkingPassCar());
+				getEntrancePassQueue().addCar(new ParkingPassCar());
 			}
 			break;	            
 		}

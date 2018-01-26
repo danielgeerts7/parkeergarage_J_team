@@ -6,6 +6,7 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
+import controller.CarQueue;
 import model.Car;
 import model.Location;
 import model.Model;
@@ -93,5 +94,13 @@ public class CarParkView extends JPanel {
 				 60 + location.getPlace() * 10,
 				 20 - 1,
 				 10 - 1); // TODO use dynamic size or constants
+	 }
+	 
+	 public CarQueue getAHCQ() {
+		 return model.getEntranceCarQueue();
+	 }
+
+	 public CarQueue getPPQ() {
+		 return model.getEntrancePassQueue();
 	 }
 }
