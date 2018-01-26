@@ -2,14 +2,12 @@
 package model;
 
 //import java classes
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 // import own classes
 import controller.CarQueue;
-import view.CarParkView;
 import view.MainView;
 
 /**   
@@ -52,6 +50,16 @@ public class Model extends Thread{
 	private int tickPause = 100;
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
+	
+	private int currentTick = 0;
+	private double priceToPayPerMinuteWhenParked = 0.1;
+	
+	private int moneyMade = 0;
+	private int expectedMoneyToBeMade = 0;
+	
+	// Create the JFrame
+	private JFrame frame;
+	private String ApplicationTitle = "The J-Team";
 
 	// All views that are used in this application
 	public MainView mainView;
@@ -69,15 +77,12 @@ public class Model extends Thread{
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
 
-		mainView = new MainView(this, numberOfFloors, numberOfRows, numberOfPlaces);
-	}
+		// Create JFrame with title name
+		frame = new JFrame(ApplicationTitle);
 
-	/**
-	 *	Update every view that this application has
-	 */
-	public void updateViews() {
-		mainView.updateView();
+		mainView = new MainView(this, frame, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
+	
 
 	public void run(){
 		while (running) {
@@ -113,17 +118,21 @@ public class Model extends Thread{
     }
 
     public void resumeSimulator() {
-        synchronized (pauseLock) {
-            paused = false;
-            pauseLock.notifyAll(); // Unblocks thread
-        }
+    	if (paused) {
+    		synchronized (pauseLock) {
+	            paused = false;
+	            pauseLock.notifyAll(); // Unblocks thread
+	        }
+    	}
     }
 	
 	private void tick(boolean withSleep) {
 		advanceTime();
 		updateCarTime();
 		handleExit();
-		updateViews();
+		calculateMoney();
+		mainView.updateView();
+		currentTick++;
 		// Pause.
 		// the + 100 ticks function doesn't need Thread.sleep
 		if (withSleep) {
@@ -167,6 +176,21 @@ public class Model extends Thread{
 		carsPaying();
 		carsLeaving();
 	}
+	
+	private void calculateMoney() {
+		expectedMoneyToBeMade = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof AdHocCar) {
+						expectedMoneyToBeMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
+					}
+				}
+			}
+		}
+	}
 
 	private void carsArriving(){
 		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals());
@@ -208,6 +232,7 @@ public class Model extends Thread{
 		while (getPaymentCarQueue().carsInQueue()>0 && i < getPaymentSpeed()){
 			Car car = getPaymentCarQueue().removeCar();
 			// TODO Handle payment.
+			moneyMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
 			carLeavesSpot(car);
 			i++;
 		}
@@ -425,5 +450,89 @@ public class Model extends Thread{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @return current Tick
+	 */
+	public int getCurrentTick() {
+		return currentTick;
+	}
+	
+	/**
+	 * @return all the money that the paying customers have payed
+	 */
+	public double getEarnedMoney() {
+		return moneyMade;
+	}
+	
+	/**
+	 * @return all the money that the paying customers yet have to pay before leaving the parking garage
+	 */
+	public double getExpectedMoneyToBeEarned() {
+		return expectedMoneyToBeMade;
+	}
+	
+	/**
+	 * This function makes the string format of the time look like we are used to know
+	 * @return complete time string
+	 */
+	public String getTime() {		
+		String completeStr = "";
+		
+		if (day < 10) {
+			completeStr += "0";
+		}
+		completeStr += day;
+		completeStr += ":";
+		if (hour < 10) {
+			completeStr += "0";
+		}
+		completeStr += hour;
+		completeStr += ":";
+		if (minute < 10) {
+			completeStr += "0";
+		}
+		completeStr += minute;
+		
+    	return completeStr;
+    }
+	
+	/**
+	 * @return amount of paying cars that are parked in the garage
+	 */
+	public int getCurrentAdHocCarsParked() {
+		int amountOfCars = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof AdHocCar) {
+						amountOfCars++;
+					}
+				}
+			}
+		}
+		return amountOfCars;
+	}
+	
+	/**
+	 * @return amount of pass holding cars that are parked in the garage
+	 */
+	public int getCurrentParkingPassCarsParked() {
+		int amountOfCars = 0;
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows(); row++) {
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					Car car = getCarAt(location);
+					if (car != null && car instanceof ParkingPassCar) {
+						amountOfCars++;
+					}
+				}
+			}
+		}
+		return amountOfCars;
 	}
 }

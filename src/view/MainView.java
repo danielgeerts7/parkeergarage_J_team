@@ -15,19 +15,27 @@ import model.Model;
  * @author danielgeerts7
  * @version 22-01-2018
  */
-public class MainView extends JFrame {
+public class MainView {	
 	
-	private static final long serialVersionUID = 1L;
+	private JFrame frame;
+	private Model model;
+	
 	private CarParkView carParkView;
 	public JPanel buttonPane;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
 	
-	public MainView(Model model, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+	private TextInformationView textInfoView;
+	
+	public MainView(Model model, JFrame frame, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+		this.frame = frame;
+		this.model = model;
+		
 		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
 		buttonPane = new JPanel();
 		
+		textInfoView = new TextInformationView();
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
@@ -35,18 +43,20 @@ public class MainView extends JFrame {
 		buttonPane.add(pause);
 		buttonPane.add(plusHundredTicks);
 		
-		Container contentPane = getContentPane();
+		Container contentPane = frame.getContentPane();
         contentPane.add(carParkView, BorderLayout.CENTER);
         contentPane.add(buttonPane, BorderLayout.SOUTH);
+        contentPane.add(textInfoView, BorderLayout.NORTH);
         
-        pack();
-        setVisible(true);
+        frame.pack();
+        frame.setVisible(true);
 
         updateView();
     }
 
     public void updateView() {
         carParkView.updateView();
+        textInfoView.updateInfo(model);
     }
 
 }
