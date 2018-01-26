@@ -3,7 +3,9 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 
+import model.AdHocCar;
 import model.Model;
+import model.ParkingPassCar;
 
 /**
  * This class shows some information on the top side of the application
@@ -138,8 +140,8 @@ public class TextInformationView extends JPanel {
     	tickLabel.setText(model.getCurrentTick() + "/10.000");
     	
     	// Update current parked cars information
-    	int parkedAdHocCars = model.getCurrentAdHocCarsParked();
-    	int parkedPassholderCars = model.getCurrentParkingPassCarsParked();
+    	int parkedAdHocCars = model.getCurrentCarsParkedOfClass(AdHocCar.class);
+    	int parkedPassholderCars = model.getCurrentCarsParkedOfClass(ParkingPassCar.class);
     	currentParkedCarsLabel.setText(Integer.toString(parkedAdHocCars + parkedPassholderCars));
     	currentParkedPayingCarsLabel.setText(Integer.toString(parkedAdHocCars));
     	currentParkedPassholderCarsLabel.setText(Integer.toString(parkedPassholderCars));
