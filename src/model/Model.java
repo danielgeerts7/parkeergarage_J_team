@@ -499,35 +499,16 @@ public class Model extends Thread{
     }
 	
 	/**
-	 * @return amount of paying cars that are parked in the garage
+	 * @return number of cars with a certain class that are parked in the garage
 	 */
-	public int getCurrentAdHocCarsParked() {
+	public int getCurrentCarsParkedOfClass(Class<?> cls) {
 		int amountOfCars = 0;
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
 					Car car = getCarAt(location);
-					if (car != null && car instanceof AdHocCar) {
-						amountOfCars++;
-					}
-				}
-			}
-		}
-		return amountOfCars;
-	}
-	
-	/**
-	 * @return amount of pass holding cars that are parked in the garage
-	 */
-	public int getCurrentParkingPassCarsParked() {
-		int amountOfCars = 0;
-		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
-			for (int row = 0; row < getNumberOfRows(); row++) {
-				for (int place = 0; place < getNumberOfPlaces(); place++) {
-					Location location = new Location(floor, row, place);
-					Car car = getCarAt(location);
-					if (car != null && car instanceof ParkingPassCar) {
+					if (car != null && cls.isInstance(car)) {
 						amountOfCars++;
 					}
 				}
