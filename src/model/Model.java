@@ -153,7 +153,7 @@ public class Model extends Thread{
 
 	private void updateCarTime() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
-			for (int row = 0; row < getNumberOfRows(); row++) {
+			for(int row= 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
 					Car car = getCarAt(location);
@@ -205,9 +205,16 @@ public class Model extends Thread{
 		// Remove car from the front of the queue and assign to a parking space.
 		while (queue.carsInQueue() > 0 && getNumberOfOpenSpots() > 0 && i < getEnterSpeed()) {
 			Car car = queue.removeCar();
+			if (car instanceof ParkingPassCar) {
+			Location freeLocation = getFirstFreeLocationPass();
+			setCarAt(freeLocation, car);
+			i++;
+			}
+			else {
 			Location freeLocation = getFirstFreeLocation();
 			setCarAt(freeLocation, car);
 			i++;
+			}
 		}
 	}
 
@@ -297,6 +304,22 @@ public class Model extends Thread{
 	}
 
 	public Location getFirstFreeLocation() {
+		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
+			for (int row = 0; row < getNumberOfRows();row++){
+				if (floor == 0 && row < 4) {
+				row+=4;
+				}
+				for (int place = 0; place < getNumberOfPlaces(); place++) {
+					Location location = new Location(floor, row, place);
+					if (getCarAt(location) == null) {
+						return location;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	public Location getFirstFreeLocationPass() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
