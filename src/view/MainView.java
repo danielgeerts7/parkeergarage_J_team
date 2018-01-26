@@ -27,6 +27,9 @@ public class MainView {
 	private Model model;
 	
 	private CarParkView carParkView;
+	private CarQueueView carQueueView;
+	private CarQueueView carQueueView2;
+	private QueueView queueView;
 	public JPanel buttonPane;
 	public JButton resume;
 	public JButton pause;
@@ -42,6 +45,9 @@ public class MainView {
 		this.model = model;
 		
 		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
+		carQueueView = new CarQueueView(carParkView.getAHCQ(), "people to buy a ticket");
+		carQueueView2 = new CarQueueView(carParkView.getPPQ(), "people who have a card");
+		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
 		
 		textInfoView = new TextInformationView();
@@ -57,7 +63,9 @@ public class MainView {
 		contentPane.add(carParkView, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 		contentPane.add(textInfoView, BorderLayout.NORTH);
-                
+		contentPane.add(queueView, BorderLayout.NORTH);
+              
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
 
@@ -70,6 +78,7 @@ public class MainView {
     public void updateView() {
         carParkView.updateView();
         textInfoView.updateInfo(model);
+        queueView.updateView();
     }
 
 }
