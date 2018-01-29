@@ -32,6 +32,7 @@ public class MainView {
 	private QueueView queueView;
 	public JPanel buttonPane;
 	private JPanel northView;
+	private LineChartView lineChartView;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
@@ -51,12 +52,14 @@ public class MainView {
 		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
 		northView = new JPanel();
+		lineChartView = new LineChartView();
 		
 		textInfoView = new TextInformationView();
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(textInfoView, BorderLayout.NORTH);
 		northView.add(queueView, BorderLayout.CENTER);
+		northView.add(buttonPane, BorderLayout.SOUTH);
 		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
@@ -68,8 +71,9 @@ public class MainView {
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(carParkView, BorderLayout.CENTER);
-		contentPane.add(buttonPane, BorderLayout.SOUTH);
+		contentPane.add(lineChartView, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
+		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
