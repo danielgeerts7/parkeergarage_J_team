@@ -31,6 +31,7 @@ public class MainView {
 	private CarQueueView carQueueView2;
 	private QueueView queueView;
 	public JPanel buttonPane;
+	private JPanel northView;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
@@ -49,8 +50,14 @@ public class MainView {
 		carQueueView2 = new CarQueueView(carParkView.getPPQ(), "people who have a card");
 		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
+		northView = new JPanel();
 		
 		textInfoView = new TextInformationView();
+		
+		northView.setLayout(new BorderLayout());
+		northView.add(textInfoView, BorderLayout.NORTH);
+		northView.add(queueView, BorderLayout.CENTER);
+		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
@@ -62,8 +69,7 @@ public class MainView {
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(carParkView, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
-		contentPane.add(textInfoView, BorderLayout.NORTH);
-		contentPane.add(queueView, BorderLayout.NORTH);
+		contentPane.add(northView, BorderLayout.NORTH);
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
