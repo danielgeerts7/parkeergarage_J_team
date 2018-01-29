@@ -41,8 +41,6 @@ public class Model extends Thread{
 	int weekDayPassArrivals= 50; // average number of arriving cars per hour
 	int weekendPassArrivals = 5; // average number of arriving cars per hour
 	
-	
-	
 	private int numberOfFloors;
 	private int numberOfRows;
 	private int numberOfPlaces;
@@ -133,6 +131,9 @@ public class Model extends Thread{
 		updateCarTime();
 		handleExit();
 		calculateMoney();
+		if (currentTick % 10 == 0) {
+			updateLineChart();
+		}
 		mainView.updateView();
 		currentTick++;
 		// Pause.
@@ -557,5 +558,12 @@ public class Model extends Thread{
 			}
 		}
 		return amountOfCars;
+	}
+	
+	public void updateLineChart() {
+		pauseSimulator();
+		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
+		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
+		resumeSimulator();
 	}
 }

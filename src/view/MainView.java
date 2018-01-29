@@ -21,7 +21,7 @@ public class MainView {
 	// A 16:9 resolution
 	private int width = 1536;
 	private int height = 864;
-	private boolean fullscreen = false;
+	private boolean fullscreen = true;
 	
 	private JFrame frame;
 	private Model model;
@@ -32,7 +32,7 @@ public class MainView {
 	private QueueView queueView;
 	public JPanel buttonPane;
 	private JPanel northView;
-	private LineChartView lineChartView;
+	public LineChartView lineChartView;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
@@ -89,6 +89,7 @@ public class MainView {
         carParkView.updateView();
         textInfoView.updateInfo(model);
         queueView.updateView();
+        lineChartView.repaint();
     }
 
 }
