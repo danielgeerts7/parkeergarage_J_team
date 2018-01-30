@@ -84,7 +84,7 @@ public class CarParkView extends JPanel {
 				 graphics.setColor(Color.black);
 				 if (doOnce) {
 					 drawLinesAroundFloors(graphics, floor);
-					 addLabelsToTheFloors(floor+1);
+					 addLabelsToTheFloors(floor);
 				 }
 				 for(int row = 0; row < numberOfRows; row++) {
 					 for(int place = 0; place < numberOfPlaces; place++) {
@@ -133,10 +133,19 @@ public class CarParkView extends JPanel {
 	 
 	 private void addLabelsToTheFloors(int floor) {
 		 JLabel floorLabel = new JLabel("Floor " + floor);
+         switch (floor) {
+            case 0:  floorLabel.setText("Ground floor");
+                    break;
+            case 1:  floorLabel.setText("First floor");
+                    break;
+            case 2:  floorLabel.setText("Second floor");
+            		break;
+         }
 		 floorLabel.setFont(new Font("", Font.BOLD, 24));
+		 floor++;
 		 
 		 this.add(floorLabel);
 		 int fontsize = floorLabel.getFont().getSize();
-		 floorLabel.setBounds((floorWidth * floor) - (fontsize + 100), 25, fontsize+100, fontsize);
+		 floorLabel.setBounds((floorWidth * floor) - (fontsize + 175), 25, 200, fontsize);
 	 }
 }
