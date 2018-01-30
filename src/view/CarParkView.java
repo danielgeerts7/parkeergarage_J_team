@@ -1,9 +1,14 @@
 package view;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controller.CarQueue;
@@ -21,11 +26,16 @@ public class CarParkView extends JPanel {
 	private int numberOfFloors;
 	private int numberOfRows;
 	private int numberOfPlaces;
+	
+	private int floorWidth = 260;
+	private boolean doOnce = true;
+
 
 	/**
 	 * Constructor for objects of class CarPark
 	 */
 	 public CarParkView(Model model, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+		 setLayout(null);
 		 this.model = model;
 		 size = new Dimension(0, 0);
 
@@ -71,6 +81,11 @@ public class CarParkView extends JPanel {
 		 if (carParkImage != null) {
 			 Graphics graphics = carParkImage.getGraphics();
 			 for(int floor = 0; floor < numberOfFloors; floor++) {
+				 graphics.setColor(Color.black);
+				 if (doOnce) {
+					 drawLinesAroundFloors(graphics, floor);
+					 addLabelsToTheFloors(floor+1);
+				 }
 				 for(int row = 0; row < numberOfRows; row++) {
 					 for(int place = 0; place < numberOfPlaces; place++) {
 						 Location location = new Location(floor, row, place);
@@ -80,6 +95,7 @@ public class CarParkView extends JPanel {
 					 }
 				 }
 			 }
+			 doOnce = false;
 		 }
 		 repaint();
 	 }
@@ -90,7 +106,7 @@ public class CarParkView extends JPanel {
 	 private void drawPlace(Graphics graphics, Location location, Color color) {
 		 graphics.setColor(color);
 		 graphics.fillRect(
-				 location.getFloor() * 260 + (1 + (int)Math.floor(location.getRow() * 0.5)) * 75 + (location.getRow() % 2) * 20,
+				 location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * 75 + (location.getRow() % 2) * 20,
 				 60 + location.getPlace() * 10,
 				 20 - 1,
 				 10 - 1); // TODO use dynamic size or constants
@@ -102,5 +118,32 @@ public class CarParkView extends JPanel {
 
 	 public CarQueue getPPQ() {
 		 return model.getEntrancePassQueue();
+	 }
+	 	 
+	 private void drawLinesAroundFloors(Graphics g, int floor) {
+		 int startX = 50 + (floor * floorWidth);
+		 int startY = 10;
+		 
+		 int rowSize = (numberOfRows * 32) + 50;
+		 int placeSize = (numberOfPlaces * 10) + 75;
+		 
+		 // top line
+		 g.drawLine(startX, startY, startX + rowSize, startY);
+		 // left line
+		 g.drawLine(startX, startY, startX, startY + placeSize);
+		 // bottom line
+		 g.drawLine(startX, startY + placeSize, startX + rowSize, startY + placeSize);
+		 // right line
+		 g.drawLine(startX + rowSize, startY, startX + rowSize, startY + placeSize);
+	 }
+	 
+	 
+	 private void addLabelsToTheFloors(int floor) {
+		 JLabel floorLabel = new JLabel("Floor " + floor);
+		 floorLabel.setFont(new Font("", Font.BOLD, 24));
+		 
+		 this.add(floorLabel);
+		 int fontsize = floorLabel.getFont().getSize();
+		 floorLabel.setBounds((floorWidth * floor) - (fontsize + 100), 25, fontsize+100, fontsize);
 	 }
 }
