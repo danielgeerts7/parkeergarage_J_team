@@ -4,10 +4,9 @@ package model;
 //import java classes
 import java.util.Random;
 
-import javax.swing.JFrame;
-
 // import own classes
 import controller.CarQueue;
+import controller.PlaySongController;
 import view.MainView;
 
 /**   
@@ -59,14 +58,14 @@ public class Model extends Thread{
 	private int moneyMade = 0;
 	private int expectedMoneyToBeMade = 0;
 	
-	// Create the JFrame
-	private JFrame frame;
+	private PlaySongController playSongController;
+	private String audioFilePath = "media/The-A-Team-theme-song.wav";
+	
+	// Create the application title for the JFrame in MainView
 	private String ApplicationTitle = "The J-Team";
-
-	// All views that are used in this application
 	public MainView mainView;
 
-	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces, boolean playSound) {
 		entranceCarQueue = new CarQueue();
 		entrancePassQueue = new CarQueue();
 		paymentCarQueue = new CarQueue();
@@ -79,10 +78,10 @@ public class Model extends Thread{
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
 
-		// Create JFrame with title name
-		frame = new JFrame(ApplicationTitle);
+		playSongController = new PlaySongController(audioFilePath, playSound);
+		playSongController.start();
 
-		mainView = new MainView(this, frame, numberOfFloors, numberOfRows, numberOfPlaces);
+		mainView = new MainView(this, ApplicationTitle, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
 	
 
@@ -126,6 +125,10 @@ public class Model extends Thread{
 	            pauseLock.notifyAll(); // Unblocks thread
 	        }
     	}
+    	if (!playSongController.isPlaying() && playSongController.canPlay()) {
+			playSongController = new PlaySongController(audioFilePath);
+			playSongController.start();
+		}
     }
 	
 	private void tick(boolean withSleep) {

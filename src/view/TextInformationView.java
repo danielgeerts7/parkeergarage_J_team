@@ -137,7 +137,7 @@ public class TextInformationView extends JPanel {
     public void updateInfo(Model model) {
     	// Update tick and time
     	timeLabel.setText(model.getTime());
-    	tickLabel.setText(model.getCurrentTick() + "/10.000");
+    	tickLabel.setText(Integer.toString(model.getCurrentTick()));
     	
     	// Update current parked cars information
     	int parkedAdHocCars = model.getCurrentCarsParkedOfClass(AdHocCar.class);
