@@ -127,14 +127,7 @@ public class CarParkView extends JPanel {
 		 int rowSize = (numberOfRows * 32) + 50;
 		 int placeSize = (numberOfPlaces * 10) + 75;
 		 
-		 // top line
-		 g.drawLine(startX, startY, startX + rowSize, startY);
-		 // left line
-		 g.drawLine(startX, startY, startX, startY + placeSize);
-		 // bottom line
-		 g.drawLine(startX, startY + placeSize, startX + rowSize, startY + placeSize);
-		 // right line
-		 g.drawLine(startX + rowSize, startY, startX + rowSize, startY + placeSize);
+		 g.drawRect(startX, startY, rowSize, placeSize);//posX, posY, width, height
 	 }
 	 
 	 
