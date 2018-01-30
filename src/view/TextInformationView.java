@@ -167,9 +167,7 @@ public class TextInformationView extends JPanel {
     	
     	// Information about the paying customers
     	// Something with price and the expected price
-    	String resultEarned = String.format("%.2f",  model.getEarnedMoney());
-    	earnedMoney.setText(euroSign + resultEarned + ",-");
-    	String resultExpected = String.format("%.2f",  model.getExpectedMoneyToBeEarned());
-    	expectedToBeEarnedMoney.setText(euroSign + resultExpected + ",-");
+    	earnedMoney.setText(euroSign + " " + model.getEarnedMoney() + ".00 ,-");
+    	expectedToBeEarnedMoney.setText(euroSign + " " + model.getExpectedMoneyToBeEarned() + ".00 ,-");
     }
 }
