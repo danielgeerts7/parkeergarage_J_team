@@ -12,36 +12,34 @@ public class PieChart extends JPanel {
 
 	private Rectangle bounds;
 	public ArrayList<PieSlice> slices = new ArrayList<PieSlice>();
-	
+
 	PieChart() {
 		bounds = new Rectangle(300, 300);
 	}
-	
+
 	public void paint(Graphics g) {
 		drawPie((Graphics2D) g, bounds, slices);
 	}
-	
+
 	void drawPie(Graphics2D g, Rectangle area, ArrayList<PieSlice> slices) {
-		
 		double total = 0.0D;
-		
 		for (int i = 0; i < slices.size(); i++) {
 			total += slices.get(i).value;
 		}
-		
 		double curValue = 0.0D;
 		int startAngle = 0;
 		for (int i = 0; i < slices.size(); i++) {
-			startAngle = (int) (curValue * 360 / total);
+			startAngle = (int) (curValue * 360 / total) + 90;
 			int arcAngle = (int) (slices.get(i).value * 360 / total);
 			g.setColor(slices.get(i).color);
-			g.fillArc(50, 50, area.width, area.height, startAngle, arcAngle);
+			g.fillArc(50, 60, area.width, area.height, 
+					startAngle, arcAngle);
 			curValue += slices.get(i).value;
 		}
 	}
-	
-	public void addPieSlice(double value, Color color) {
-		PieSlice slice = new PieSlice(value, color);
+
+	public void addPieSlice(double d, Color color) {
+		PieSlice slice = new PieSlice(d, color);
 		slices.add(slice);
 	}
 }

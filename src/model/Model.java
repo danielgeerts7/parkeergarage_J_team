@@ -41,24 +41,23 @@ public class Model extends Thread{
 	int weekendArrivals = 200; // average number of arriving cars per hour
 	int weekDayPassArrivals= 50; // average number of arriving cars per hour
 	int weekendPassArrivals = 5; // average number of arriving cars per hour
-	
+
 	private int numberOfFloors;
 	private int numberOfRows;
 	private int numberOfPlaces;
 	private int numberOfOpenSpots;
-	private int numberOfTotalSpots;
 	private Car[][][] cars;
 
 	private int tickPause = 100;
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
-	
+
 	private int currentTick = 0;
 	private double priceToPayPerMinuteWhenParked = 0.1;
-	
+
 	private int moneyMade = 0;
 	private int expectedMoneyToBeMade = 0;
-	
+
 	// Create the JFrame
 	private JFrame frame;
 	private String ApplicationTitle = "The J-Team";
@@ -77,7 +76,6 @@ public class Model extends Thread{
 		this.numberOfPlaces = numberOfPlaces;
 
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
-		this.numberOfTotalSpots = numberOfFloors * numberOfRows * numberOfPlaces;
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
 
 		// Create JFrame with title name
@@ -85,50 +83,50 @@ public class Model extends Thread{
 
 		mainView = new MainView(this, frame, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
-	
+
 
 	public void run(){
 		while (running) {
-			 synchronized (pauseLock) {
-	                if (!running) { // may have changed while waiting to synchronize on pauseLock
-	                    break;
-	                }
-	                if (paused) {
-	                    try {
-	                        pauseLock.wait(); // will cause this Thread to block until 
-	                                          // another thread calls pauseLock.notifyAll()
-	                                          // Note that calling wait() will 
-	                                          // relinquish the synchronized lock that this 
-	                                          // thread holds on pauseLock so another thread
-	                                          // can acquire the lock to call notifyAll()
-	                    } catch (InterruptedException ex) {
-	                        break;
-	                    }
-	                    if (!running) { // running might have changed since we paused
-	                        break;
-	                    }
-	                   
-	                }
-	                // Tick time
-	                tick(true);
-	            }
+			synchronized (pauseLock) {
+				if (!running) { // may have changed while waiting to synchronize on pauseLock
+					break;
+				}
+				if (paused) {
+					try {
+						pauseLock.wait(); // will cause this Thread to block until 
+						// another thread calls pauseLock.notifyAll()
+						// Note that calling wait() will 
+						// relinquish the synchronized lock that this 
+						// thread holds on pauseLock so another thread
+						// can acquire the lock to call notifyAll()
+					} catch (InterruptedException ex) {
+						break;
+					}
+					if (!running) { // running might have changed since we paused
+						break;
+					}
+
+				}
+				// Tick time
+				tick(true);
+			}
 		}
-		
+
 	}
 
-    public void pauseSimulator() {
-        paused = true;
-    }
+	public void pauseSimulator() {
+		paused = true;
+	}
 
-    public void resumeSimulator() {
-    	if (paused) {
-    		synchronized (pauseLock) {
-	            paused = false;
-	            pauseLock.notifyAll(); // Unblocks thread
-	        }
-    	}
-    }
-	
+	public void resumeSimulator() {
+		if (paused) {
+			synchronized (pauseLock) {
+				paused = false;
+				pauseLock.notifyAll(); // Unblocks thread
+			}
+		}
+	}
+
 	private void tick(boolean withSleep) {
 		advanceTime();
 		updateCarTime();
@@ -136,10 +134,7 @@ public class Model extends Thread{
 		calculateMoney();
 		if (withSleep) {
 			updatePieChart();
-			//Every 10 ticks
-//			if (currentTick % 10 == 0) {
-				updateLineChart();
-//			}
+			updateLineChart();
 			mainView.updateView();
 		}
 		currentTick++;
@@ -154,7 +149,7 @@ public class Model extends Thread{
 		}
 		handleEntrance();
 	}
-	
+
 	public void tickHundredTimes() {
 		for (int i = 1; i <= 100; i++) {
 			tick(false);
@@ -186,7 +181,7 @@ public class Model extends Thread{
 		carsPaying();
 		carsLeaving();
 	}
-	
+
 	private void calculateMoney() {
 		expectedMoneyToBeMade = 0;
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
@@ -204,14 +199,14 @@ public class Model extends Thread{
 
 	private void carsArriving(){
 		//System.out.println(qModifier + " " + entranceCarQueue.carsInQueue());
-		
+
 		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals()) * (enactModifier(entranceCarQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, AD_HOC);
-		
+
 		numberOfCars = getNumberOfCars(getWeekDayPassArrivals(), getWeekendPassArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, PASS);
 	}
-	
+
 	private int enactModifier(int q) {
 		if (q > 15) {
 			return 0;
@@ -220,8 +215,8 @@ public class Model extends Thread{
 			return 25;
 		}
 		if (q > 10)
-		return 50;
-		
+			return 50;
+
 		else{
 			return 100;
 		}
@@ -233,14 +228,14 @@ public class Model extends Thread{
 		while (queue.carsInQueue() > 0 && getNumberOfOpenSpots() > 0 && i < getEnterSpeed()) {
 			Car car = queue.removeCar();
 			if (car instanceof ParkingPassCar) {
-			Location freeLocation = getFirstFreeLocationPass();
-			setCarAt(freeLocation, car);
-			i++;
+				Location freeLocation = getFirstFreeLocationPass();
+				setCarAt(freeLocation, car);
+				i++;
 			}
 			else {
-			Location freeLocation = getFirstFreeLocation();
-			setCarAt(freeLocation, car);
-			i++;
+				Location freeLocation = getFirstFreeLocation();
+				setCarAt(freeLocation, car);
+				i++;
 			}
 		}
 	}
@@ -334,7 +329,7 @@ public class Model extends Thread{
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows();row++){
 				if (floor == 0 && row < 4) {
-				row+=4;
+					row+=4;
 				}
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
@@ -501,35 +496,35 @@ public class Model extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * @return current Tick
 	 */
 	public int getCurrentTick() {
 		return currentTick;
 	}
-	
+
 	/**
 	 * @return all the money that the paying customers have payed
 	 */
 	public double getEarnedMoney() {
 		return moneyMade;
 	}
-	
+
 	/**
 	 * @return all the money that the paying customers yet have to pay before leaving the parking garage
 	 */
 	public double getExpectedMoneyToBeEarned() {
 		return expectedMoneyToBeMade;
 	}
-	
+
 	/**
 	 * This function makes the string format of the time look like we are used to know
 	 * @return complete time string
 	 */
 	public String getTime() {		
 		String completeStr = "";
-		
+
 		if (day < 10) {
 			completeStr += "0";
 		}
@@ -544,10 +539,10 @@ public class Model extends Thread{
 			completeStr += "0";
 		}
 		completeStr += minute;
-		
-    	return completeStr;
-    }
-	
+
+		return completeStr;
+	}
+
 	/**
 	 * @return number of cars with a certain class that are parked in the garage
 	 */
@@ -566,20 +561,21 @@ public class Model extends Thread{
 		}
 		return amountOfCars;
 	}
-	
+
 	public void updateLineChart() {
 		pauseSimulator();
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
 		resumeSimulator();
 	}
-	
+
 	public void updatePieChart() {
-		pauseSimulator();
+		
+		double total = 540;
+		
 		mainView.pieChartView.slices.clear();
-		mainView.pieChartView.addPieSlice(numberOfOpenSpots, Color.GRAY);
-		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(AdHocCar.class), Color.RED);
-		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(ParkingPassCar.class), Color.BLUE);
-		resumeSimulator();
+		mainView.pieChartView.addPieSlice(numberOfOpenSpots / total * 100, Color.GRAY);
+		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(AdHocCar.class) / total * 100, Color.RED);
+		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(ParkingPassCar.class) / total * 100, Color.BLUE);
 	}
 }
