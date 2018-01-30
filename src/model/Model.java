@@ -1,6 +1,7 @@
 // define package name
 package model;
 
+import java.awt.Color;
 //import java classes
 import java.util.Random;
 
@@ -45,6 +46,7 @@ public class Model extends Thread{
 	private int numberOfRows;
 	private int numberOfPlaces;
 	private int numberOfOpenSpots;
+	private int numberOfTotalSpots;
 	private Car[][][] cars;
 
 	private int tickPause = 100;
@@ -75,6 +77,7 @@ public class Model extends Thread{
 		this.numberOfPlaces = numberOfPlaces;
 
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
+		this.numberOfTotalSpots = numberOfFloors * numberOfRows * numberOfPlaces;
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
 
 		// Create JFrame with title name
@@ -131,10 +134,14 @@ public class Model extends Thread{
 		updateCarTime();
 		handleExit();
 		calculateMoney();
-		if (currentTick % 10 == 0) {
-			updateLineChart();
+		if (withSleep) {
+			updatePieChart();
+			//Every 10 ticks
+//			if (currentTick % 10 == 0) {
+				updateLineChart();
+//			}
+			mainView.updateView();
 		}
-		mainView.updateView();
 		currentTick++;
 		// Pause.
 		// the + 100 ticks function doesn't need Thread.sleep
@@ -564,6 +571,15 @@ public class Model extends Thread{
 		pauseSimulator();
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
+		resumeSimulator();
+	}
+	
+	public void updatePieChart() {
+		pauseSimulator();
+		mainView.pieChartView.slices.clear();
+		mainView.pieChartView.addPieSlice(numberOfOpenSpots, Color.GRAY);
+		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(AdHocCar.class), Color.RED);
+		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(ParkingPassCar.class), Color.BLUE);
 		resumeSimulator();
 	}
 }

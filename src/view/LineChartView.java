@@ -11,7 +11,6 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-
 public class LineChartView extends JPanel {
 
 	private static final long serialVersionUID = 1L;
