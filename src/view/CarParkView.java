@@ -142,10 +142,9 @@ public class CarParkView extends JPanel {
             		break;
          }
 		 floorLabel.setFont(new Font("", Font.BOLD, 24));
-		 floor++;
 		 
 		 this.add(floorLabel);
 		 int fontsize = floorLabel.getFont().getSize();
-		 floorLabel.setBounds((floorWidth * floor) - (fontsize + 175), 25, 200, fontsize);
+		 floorLabel.setBounds((floorWidth * (floor+1)) - (fontsize + 175), 25, 200, fontsize);
 	 }
 }
