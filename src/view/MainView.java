@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 
@@ -38,8 +39,10 @@ public class MainView {
 	
 	private TextInformationView textInfoView;
 	
-	public MainView(Model model, JFrame frame, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
-		this.frame = frame;
+	public MainView(Model model, String applicationName, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+		// Create JFrame with title name
+		this.frame = new JFrame(applicationName);
+		
 		if (fullscreen) {
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		}
@@ -55,8 +58,9 @@ public class MainView {
 		textInfoView = new TextInformationView();
 		
 		northView.setLayout(new BorderLayout());
-		northView.add(textInfoView, BorderLayout.NORTH);
-		northView.add(queueView, BorderLayout.CENTER);
+		northView.add(textInfoView, BorderLayout.CENTER);
+		northView.add(new ImageComponent("media/The-J-Team_logo.png", 8), BorderLayout.WEST);
+		northView.add(queueView, BorderLayout.SOUTH);
 		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
