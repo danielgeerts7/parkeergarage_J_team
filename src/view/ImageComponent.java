@@ -10,18 +10,18 @@ import javax.swing.*;
 class ImageComponent extends JPanel {
     
 	private BufferedImage image;
-	private int divideByImgSize = 8;
-	private int paddingLeft = 40;
-	private int paddingTop = 5;
+	private double divideByImgSize = 8;
+	private int paddingLeft = 60;
+	private int paddingTop = 15;
     
-    public ImageComponent(String path, int divideByImgSize){
+    public ImageComponent(String path, double divideByImgSize){
     	this.divideByImgSize = divideByImgSize;
     	this.setBackground(Color.WHITE);
 
         try{
         	image = ImageIO.read(new File(path));
-        	int height = image.getHeight() / divideByImgSize;
-         	int width = image.getWidth() / divideByImgSize;
+        	int height = (int)(image.getHeight() / divideByImgSize);
+         	int width = (int)(image.getWidth() / divideByImgSize);
             this.setPreferredSize(new Dimension(width + paddingLeft, height + paddingTop));
         }
         catch (IOException e){
@@ -31,8 +31,8 @@ class ImageComponent extends JPanel {
     
     public void paintComponent (Graphics g){
     	super.paintComponent(g);
-    	int height = image.getHeight() / divideByImgSize;
-    	int width = image.getWidth() / divideByImgSize;
+    	int height = (int)(image.getHeight() / divideByImgSize);
+     	int width = (int)(image.getWidth() / divideByImgSize);
         g.drawImage(image, paddingLeft, paddingTop, width, height, this);
         if (this.getPreferredSize().getHeight() != height &&
         	this.getPreferredSize().getWidth() != width) {

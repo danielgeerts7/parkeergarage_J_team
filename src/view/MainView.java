@@ -59,7 +59,7 @@ public class MainView {
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(textInfoView, BorderLayout.CENTER);
-		northView.add(new ImageComponent("media/The-J-Team_logo.png", 8), BorderLayout.WEST);
+		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
 		northView.add(queueView, BorderLayout.SOUTH);
 		
 		resume = new JButton("Resume");

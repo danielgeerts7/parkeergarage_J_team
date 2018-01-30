@@ -543,6 +543,29 @@ public class Model extends Thread{
     	return completeStr;
     }
 	
+	public String getCurrentDay() {
+        String currentDay = "";
+	
+		switch (day) {
+		case 0:  currentDay = "Monday";
+        		break;
+        case 1:  currentDay = "Tuesday";
+                 break;
+        case 2:  currentDay = "Wednesday";
+                 break;
+        case 3:  currentDay = "Thursday";
+                 break;
+        case 4:  currentDay = "Friday";
+                 break;
+        case 5:  currentDay = "Saterday";
+                 break;
+        case 6:  currentDay = "Sunday";
+                 break;
+		}
+                 
+		return currentDay;
+	}
+	
 	/**
 	 * @return number of cars with a certain class that are parked in the garage
 	 */

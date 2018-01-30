@@ -2,6 +2,8 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import model.AdHocCar;
 import model.Model;
@@ -17,7 +19,7 @@ import model.ParkingPassCar;
  */
 public class TextInformationView extends JPanel {
     
-	private static JLabel timeTitle, tickTitle, timeLabel, tickLabel;
+	private static JLabel currentDay, timeTitle, tickTitle, timeLabel, tickLabel;
 	
 	// Title of current parked cars
 	private static JLabel currentParkedCarsTitle, currentParkedPayingCarsTitle, currentParkedPassholderCarsTitle;
@@ -33,6 +35,11 @@ public class TextInformationView extends JPanel {
     public TextInformationView() {
         super(new GridBagLayout());
         setBackground(Color.WHITE);
+        
+        // Shows the current day of the week
+        currentDay = new JLabel();
+        currentDay.setFont(new Font("", Font.BOLD, 36));
+        currentDay.setBorder(new EmptyBorder(0, 0, 10, 0));//top,left,bottom,right
         
         // Title of the time and tick
         timeTitle = new JLabel("Time: ");
@@ -76,56 +83,59 @@ public class TextInformationView extends JPanel {
         c.ipady = 0;
         
         // add car time and tick information
-        c.gridx = 0;
+        c.gridx = 5;
         c.gridy = 0;
-        this.add(timeTitle, c);
-        c.gridy = 1;
-        this.add(tickTitle, c);
+        this.add(currentDay, c);
         c.gridx = 1;
-        c.gridy = 0;
-        this.add(timeLabel, c);
         c.gridy = 1;
+        this.add(timeTitle, c);
+        c.gridy = 2;
+        this.add(tickTitle, c);
+        c.gridx = 2;
+        c.gridy = 1;
+        this.add(timeLabel, c);
+        c.gridy = 2;
         this.add(tickLabel, c);
         
         // add current car amount information
-        c.gridx = 2;
-        c.gridy = 0;
-        this.add(currentParkedPayingCarsTitle, c);
-        c.gridy = 1;
-        this.add(currentParkedPassholderCarsTitle, c);
-        c.gridy = 2;
-        this.add(currentParkedCarsTitle, c);
         c.gridx = 3;
-        c.gridy = 0;
-        this.add(currentParkedPayingCarsLabel, c);
         c.gridy = 1;
-        this.add(currentParkedPassholderCarsLabel, c);
+        this.add(currentParkedPayingCarsTitle, c);
         c.gridy = 2;
+        this.add(currentParkedPassholderCarsTitle, c);
+        c.gridy = 3;
+        this.add(currentParkedCarsTitle, c);
+        c.gridx = 4;
+        c.gridy = 1;
+        this.add(currentParkedPayingCarsLabel, c);
+        c.gridy = 2;
+        this.add(currentParkedPassholderCarsLabel, c);
+        c.gridy = 3;
         this.add(currentParkedCarsLabel, c);
 
         
         // add car Queue information
-        c.gridx = 4;
-        c.gridy = 0;
-        this.add(carQueueTitle, c);
-        c.gridy = 1;
-        this.add(carPassholderQueueTitle, c);
         c.gridx = 5;
-        c.gridy = 0;
-        this.add(carQueueLabel, c);
         c.gridy = 1;
+        this.add(carQueueTitle, c);
+        c.gridy = 2;
+        this.add(carPassholderQueueTitle, c);
+        c.gridx = 6;
+        c.gridy = 1;
+        this.add(carQueueLabel, c);
+        c.gridy = 2;
         this.add(carPassholderQueueLabel, c);
         
         // add car Queue information
-        c.gridx = 6;
-        c.gridy = 0;
-        this.add(earnedMoneyTitle, c);
-        c.gridy = 1;
-        this.add(expectedToBeEarnedMoneyTitle, c);
         c.gridx = 7;
-        c.gridy = 0;
-        this.add(earnedMoney, c);
         c.gridy = 1;
+        this.add(earnedMoneyTitle, c);
+        c.gridy = 2;
+        this.add(expectedToBeEarnedMoneyTitle, c);
+        c.gridx = 8;
+        c.gridy = 1;
+        this.add(earnedMoney, c);
+        c.gridy = 2;
         this.add(expectedToBeEarnedMoney, c);
     }
     
@@ -135,6 +145,8 @@ public class TextInformationView extends JPanel {
      * @param model
      */
     public void updateInfo(Model model) {
+    	// Update the current day of the week
+    	currentDay.setText(model.getCurrentDay());
     	// Update tick and time
     	timeLabel.setText(model.getTime());
     	tickLabel.setText(Integer.toString(model.getCurrentTick()));
