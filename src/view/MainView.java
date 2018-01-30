@@ -1,14 +1,14 @@
 package view;
 
+// Import java libraries
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+// Import own made classes
 import model.Model;
 
 /**   
@@ -39,6 +39,16 @@ public class MainView {
 	
 	private TextInformationView textInfoView;
 	
+	/**
+	 * Set every variable that does not have a value yet
+	 * Also adds every view to this.frame, then the this.frame is being shown
+	 * 
+	 * @param model
+	 * @param applicationName, is the name of that is showed in the top of the window
+	 * @param numberOfFloors
+	 * @param numberOfRows
+	 * @param numberOfPlaces
+	 */
 	public MainView(Model model, String applicationName, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		// Create JFrame with title name
 		this.frame = new JFrame(applicationName);

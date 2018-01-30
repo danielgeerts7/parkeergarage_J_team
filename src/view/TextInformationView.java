@@ -1,10 +1,11 @@
 package view;
 
+//Import java libraries
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+//Import own made classes
 import model.AdHocCar;
 import model.Model;
 import model.ParkingPassCar;

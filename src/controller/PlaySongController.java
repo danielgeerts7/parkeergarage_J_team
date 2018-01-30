@@ -2,29 +2,42 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.sound.sampled.*;
 
+/**
+ * With this class you can play a song or ringtone or something like that
+ * Java supports only WAV and AU files
+ * 
+ * @author danielgeerts7
+ * @version 30-01-2018
+ */
 public class PlaySongController extends Thread implements LineListener {
 	
-	/**
-     * this flag indicates whether the playback completes or not.
-     */
 	private boolean playCompleted;
 	private static boolean isPlaying;
 	private static boolean canPlay = false;
     
     private String audioFilePath;
     
+    /**
+     * Sets the path to the song that you want to play
+     * 
+     * @param audioPath
+     */
     public PlaySongController(String audioPath) {
     	this.audioFilePath = audioPath;
     	isPlaying = false;
     }
     
+    /**
+     * With the extra parameter you can choose is the application plays the sound where the path points to
+	 *
+     * @param audioPath
+     * @param canPlay
+     */
     public PlaySongController(String audioPath, boolean canPlay) {
-    	this.audioFilePath = audioPath;
+    	this(audioPath);
     	this.canPlay = canPlay;
-    	isPlaying = false;
     }
     
 
@@ -95,7 +108,6 @@ public class PlaySongController extends Thread implements LineListener {
          
     }
 
-
 	@Override
 	public void update(LineEvent event) {
 		LineEvent.Type type = event.getType();
@@ -109,10 +121,16 @@ public class PlaySongController extends Thread implements LineListener {
         }
 	}
 	
+	/**
+	 * @return if the sound is playing or not
+	 */
 	public boolean isPlaying() {
 		return isPlaying;
 	}
 	
+	/**
+	 * @return if the sound may play or not
+	 */
 	public boolean canPlay() {
 		return canPlay;
 	}
