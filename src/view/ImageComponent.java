@@ -11,6 +11,8 @@ class ImageComponent extends JPanel {
     
 	private BufferedImage image;
 	private int divideByImgSize = 8;
+	private int paddingLeft = 40;
+	private int paddingTop = 5;
     
     public ImageComponent(String path, int divideByImgSize){
     	this.divideByImgSize = divideByImgSize;
@@ -20,7 +22,7 @@ class ImageComponent extends JPanel {
         	image = ImageIO.read(new File(path));
         	int height = image.getHeight() / divideByImgSize;
          	int width = image.getWidth() / divideByImgSize;
-            this.setPreferredSize(new Dimension(width, height));
+            this.setPreferredSize(new Dimension(width + paddingLeft, height + paddingTop));
         }
         catch (IOException e){
             e.printStackTrace();
@@ -31,10 +33,10 @@ class ImageComponent extends JPanel {
     	super.paintComponent(g);
     	int height = image.getHeight() / divideByImgSize;
     	int width = image.getWidth() / divideByImgSize;
-        g.drawImage(image, 0, 0, width, height, this);
+        g.drawImage(image, paddingLeft, paddingTop, width, height, this);
         if (this.getPreferredSize().getHeight() != height &&
         	this.getPreferredSize().getWidth() != width) {
-        	this.setPreferredSize(new Dimension(width, height));
+            this.setPreferredSize(new Dimension(width + paddingLeft, height + paddingTop));
         }
     }
 }
