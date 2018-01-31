@@ -2,7 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/stijnwesterhof/Downloads/jfreechart-1.0.19 2/lib/jcommon-1.0.23.jar"/>
-	<classpathentry kind="lib" path="/Users/stijnwesterhof/Downloads/jfreechart-1.0.19 2/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="src" path="libraries">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="parkeergarage-remote/libraries"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/stijnwesterhof/code/Eclipse/parkeergarage-remote/libraries/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/stijnwesterhof/code/Eclipse/parkeergarage-remote/libraries/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

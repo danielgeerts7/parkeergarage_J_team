@@ -75,7 +75,6 @@ public class MainView {
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(carParkView, BorderLayout.WEST);
-		contentPane.add(lineChartView, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
 		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);
 		contentPane.add(pieChartView, BorderLayout.CENTER);
@@ -95,7 +94,6 @@ public class MainView {
         textInfoView.updateInfo(model);
         queueView.updateView();
         lineChartView.repaint();
-        pieChartView.revalidate();
         pieChartView.repaint();
     }
 
