@@ -57,8 +57,8 @@ public class Model extends Thread{
 	private int currentTick = 0;
 	private double priceToPayPerMinuteWhenParked = 0.1;
 	
-	private int moneyMade = 0;
-	private int expectedMoneyToBeMade = 0;
+	private long moneyMade = 0;
+	private long expectedMoneyToBeMade = 0;
 	
 	private PlaySongController playSongController;
 	private String audioFilePath = "media/The-A-Team-theme-song.wav";
@@ -537,14 +537,14 @@ public class Model extends Thread{
 	/**
 	 * @return all the money that the paying customers have payed
 	 */
-	public double getEarnedMoney() {
+	public long getEarnedMoney() {
 		return moneyMade;
 	}
 
 	/**
 	 * @return all the money that the paying customers yet have to pay before leaving the parking garage
 	 */
-	public double getExpectedMoneyToBeEarned() {
+	public long getExpectedMoneyToBeEarned() {
 		return expectedMoneyToBeMade;
 	}
 
