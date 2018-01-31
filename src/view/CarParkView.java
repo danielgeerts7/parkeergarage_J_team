@@ -27,7 +27,8 @@ public class CarParkView extends JPanel {
 	private int numberOfRows;
 	private int numberOfPlaces;
 	
-	private int floorWidth = 260;
+	private int floorWidth = 250;
+	private int rowWidth = 60;
 	private boolean doOnce = true;
 
 
@@ -106,8 +107,8 @@ public class CarParkView extends JPanel {
 	 private void drawPlace(Graphics graphics, Location location, Color color) {
 		 graphics.setColor(color);
 		 graphics.fillRect(
-				 location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * 75 + (location.getRow() % 2) * 20,
-				 50 + location.getPlace() * 10,
+				 location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20,
+				 40 + location.getPlace() * 10,
 				 20 - 1,
 				 10 - 1); // TODO use dynamic size or constants
 	 }
@@ -145,6 +146,6 @@ public class CarParkView extends JPanel {
 		 
 		 this.add(floorLabel);
 		 int fontsize = floorLabel.getFont().getSize();
-		 floorLabel.setBounds((floorWidth * (floor+1)) - (fontsize + 175), 25, 200, fontsize);
+		 floorLabel.setBounds((floorWidth * (floor+1)) - (fontsize + 175), 5, 200, fontsize);
 	 }
 }
