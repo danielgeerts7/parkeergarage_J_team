@@ -30,9 +30,15 @@ public class CarQueueView extends JPanel{
 		}else {
 			for(Car car : q.getQueue()) {
 				Color carColor = car.getColor();
-				g.setColor(carColor);
-				g.fillRect(x, 25, 40, 20);
-				x += 42;
+				if (carColor != Color.LIGHT_GRAY) {
+					g.setColor(carColor);
+					g.fillRect(x, 25, 40, 20);
+					x += 42;
+				} else {
+					g.setColor(Color.orange);
+					g.fillRect(x, 25, 40, 20);
+					x += 42;
+				}
 			}	
 		}
 	}
