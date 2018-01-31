@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -68,6 +69,8 @@ public class MainView {
 		buttonPane.add(pause);
 		buttonPane.add(plusHundredTicks);
 		
+		pieChartView.plot.setBackgroundPaint(frame.getBackground());
+		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(carParkView, BorderLayout.WEST);
@@ -91,6 +94,7 @@ public class MainView {
         textInfoView.updateInfo(model);
         queueView.updateView();
         lineChartView.repaint();
+        pieChartView.revalidate();
         pieChartView.repaint();
     }
 

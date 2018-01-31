@@ -22,7 +22,7 @@ public class LineChartView extends JPanel {
 		dataset = createDataset();
 		// Create chart
 		JFreeChart chart = ChartFactory.createLineChart(
-				"Parking chart", // Chart title
+				"", // Chart title
 				"Tick", // X-Axis Label
 				"Number of cars", // Y-Axis Label
 				dataset

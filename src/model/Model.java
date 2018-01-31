@@ -7,6 +7,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import org.jfree.data.general.DefaultPieDataset;
+
 // import own classes
 import controller.CarQueue;
 import view.MainView;
@@ -570,12 +572,11 @@ public class Model extends Thread{
 	}
 
 	public void updatePieChart() {
-		
-		double total = 540;
-		
-		mainView.pieChartView.slices.clear();
-		mainView.pieChartView.addPieSlice(numberOfOpenSpots / total * 100, Color.GRAY);
-		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(AdHocCar.class) / total * 100, Color.RED);
-		mainView.pieChartView.addPieSlice(getCurrentCarsParkedOfClass(ParkingPassCar.class) / total * 100, Color.BLUE);
+		pauseSimulator();
+		mainView.pieChartView.dataset.setValue("Paying cars", getCurrentCarsParkedOfClass(AdHocCar.class));
+		mainView.pieChartView.dataset.setValue("Parking pass holders", getCurrentCarsParkedOfClass(ParkingPassCar.class));
+		mainView.pieChartView.dataset.setValue("Free spots", numberOfOpenSpots);
+		mainView.pieChartView.chart.fireChartChanged(); 
+		resumeSimulator();
 	}
 }
