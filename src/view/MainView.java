@@ -70,6 +70,7 @@ public class MainView {
 		buttonPane.add(plusHundredTicks);
 		
 		pieChartView.plot.setBackgroundPaint(frame.getBackground());
+		pieChartView.chart.setBackgroundPaint(frame.getBackground());
 		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));

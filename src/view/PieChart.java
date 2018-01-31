@@ -30,6 +30,7 @@ public class PieChart extends JPanel{
         plot.setCircular(true);
         plot.setShadowYOffset(0);
         plot.setShadowXOffset(0);
+        chart.setBorderPaint(Color.blue);
         
         plot.setSectionPaint("AdHoc", Color.red);
         plot.setSectionPaint("Parking pass holders", Color.blue);
