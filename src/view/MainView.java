@@ -2,6 +2,7 @@ package view;
 
 // Import java libraries
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -22,7 +23,7 @@ public class MainView {
 	// A 16:9 resolution
 	private int width = 1536;
 	private int height = 864;
-	private boolean fullscreen = false;
+	private boolean fullscreen = true;
 	
 	private JFrame frame;
 	private Model model;
@@ -33,6 +34,8 @@ public class MainView {
 	private QueueView queueView;
 	public JPanel buttonPane;
 	private JPanel northView;
+	public LineChartView lineChartView;
+	public PieChart pieChartView;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
@@ -60,36 +63,42 @@ public class MainView {
 		this.model = model;
 		
 		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
-		carQueueView = new CarQueueView(carParkView.getAHCQ(), "people to buy a ticket");
-		carQueueView2 = new CarQueueView(carParkView.getPPQ(), "people who have a card");
+		carQueueView = new CarQueueView(model.getEntranceCarQueue(), "people to buy a ticket");
+		carQueueView2 = new CarQueueView(model.getEntrancePassQueue(), "people who have a card");
 		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
 		northView = new JPanel();
-		
+		lineChartView = new LineChartView();
+		pieChartView = new PieChart();	
 		textInfoView = new TextInformationView();
 		legendaView = new LegendaView();
 		
 
-		
-		northView.setLayout(new BorderLayout());
-		northView.add(textInfoView, BorderLayout.CENTER);
-		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
-		northView.add(queueView, BorderLayout.SOUTH);
-		
-		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
+		
+		northView.setLayout(new BorderLayout());
+		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
+		northView.add(textInfoView, BorderLayout.NORTH);
+		northView.add(queueView, BorderLayout.CENTER);
+		northView.add(buttonPane, BorderLayout.SOUTH);
+		
+		
 		buttonPane.add(resume);
 		buttonPane.add(pause);
 		buttonPane.add(plusHundredTicks);
 		
+		pieChartView.plot.setBackgroundPaint(frame.getBackground());
+		pieChartView.chart.setBackgroundPaint(frame.getBackground());
+		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(legendaView, BorderLayout.WEST);
-		contentPane.add(carParkView, BorderLayout.CENTER);
-		contentPane.add(buttonPane, BorderLayout.SOUTH);
+		contentPane.add(carParkView, BorderLayout.CENTER);		contentPane.add(lineChartView, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
+		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);
+		contentPane.add(pieChartView, BorderLayout.EAST);
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
@@ -105,7 +114,8 @@ public class MainView {
         carParkView.updateView();
         textInfoView.updateInfo(model);
         queueView.updateView();
-        
+        lineChartView.repaint();
+        pieChartView.repaint();
     }
 
 }
