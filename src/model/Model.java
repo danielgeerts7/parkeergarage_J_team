@@ -1,11 +1,8 @@
 // define package name
 package model;
 
-import java.awt.Color;
 //import java classes
 import java.util.Random;
-
-import org.jfree.data.general.DefaultPieDataset;
 
 // import own classes
 import controller.CarQueue;

@@ -72,11 +72,11 @@ public class MainView {
 		pieChartView = new PieChart();	
 		textInfoView = new TextInformationView();
 		legendaView = new LegendaView();
-		
-
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
+		
+
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
@@ -94,8 +94,8 @@ public class MainView {
 		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
+		contentPane.add(carParkView, BorderLayout.CENTER);
 		contentPane.add(legendaView, BorderLayout.WEST);
-		contentPane.add(carParkView, BorderLayout.CENTER);		contentPane.add(lineChartView, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
 		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);
 		contentPane.add(pieChartView, BorderLayout.EAST);
