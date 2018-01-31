@@ -2,7 +2,6 @@ package view;
 
 // Import java libraries
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -35,6 +34,7 @@ public class MainView {
 	public JPanel buttonPane;
 	private JPanel northView;
 	private JPanel centerView;
+	private JPanel southView;
 	public LineChartView lineChartView;
 	public PieChart pieChartView;
 	public JButton resume;
@@ -70,6 +70,7 @@ public class MainView {
 		buttonPane = new JPanel();
 		northView = new JPanel();
 		centerView = new JPanel();
+		southView = new JPanel();
 		lineChartView = new LineChartView();
 		pieChartView = new PieChart();	
 		textInfoView = new TextInformationView();
@@ -86,6 +87,11 @@ public class MainView {
 		centerView.setLayout(new BorderLayout());
 		centerView.add(buttonPane, BorderLayout.NORTH);
 		centerView.add(carParkView, BorderLayout.CENTER);
+		centerView.add(legendaView, BorderLayout.WEST);
+		
+		southView.setLayout(new BorderLayout());
+		southView.add(lineChartView.panel, BorderLayout.CENTER);
+		southView.add(pieChartView, BorderLayout.EAST);
 		
 		buttonPane.add(resume);
 		buttonPane.add(pause);
@@ -98,9 +104,7 @@ public class MainView {
 		contentPane.setPreferredSize(new Dimension(width, height));
 		contentPane.add(northView, BorderLayout.NORTH);
 		contentPane.add(centerView, BorderLayout.CENTER);
-		contentPane.add(legendaView, BorderLayout.WEST);
-		contentPane.add(pieChartView, BorderLayout.EAST);
-		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);	
+		contentPane.add(southView, BorderLayout.SOUTH);
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();

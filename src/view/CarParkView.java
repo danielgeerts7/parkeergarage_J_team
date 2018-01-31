@@ -1,16 +1,13 @@
 package view;
+// Import java
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Image;
-
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+// import own classes
 import controller.CarQueue;
 import model.Car;
 import model.Location;
@@ -29,6 +26,8 @@ public class CarParkView extends JPanel {
 	
 	private int floorWidth = 250;
 	private int rowWidth = 60;
+	private int paddingTop = 50;
+	
 	private boolean doOnce = true;
 
 
@@ -70,6 +69,18 @@ public class CarParkView extends JPanel {
 			 // Rescale the previous image.
 			 g.drawImage(carParkImage, 0, 0, currentSize.width, currentSize.height, null);
 		 }
+		 for(int floor = 0; floor < numberOfFloors; floor++) {
+			 g.setColor(Color.black);
+			 drawLinesAroundFloors(g, floor);
+		 }
+		 
+		 if (doOnce) {
+			 for(int floor = 0; floor < numberOfFloors; floor++) {
+				 addLabelsToTheFloors(floor);
+			 }
+		 }
+		 doOnce = false;
+
 	 }
 
 	 public void updateView() {
@@ -82,11 +93,6 @@ public class CarParkView extends JPanel {
 		 if (carParkImage != null) {
 			 Graphics graphics = carParkImage.getGraphics();
 			 for(int floor = 0; floor < numberOfFloors; floor++) {
-				 graphics.setColor(Color.black);
-				 if (doOnce) {
-					 drawLinesAroundFloors(graphics, floor);
-					 addLabelsToTheFloors(floor);
-				 }
 				 for(int row = 0; row < numberOfRows; row++) {
 					 for(int place = 0; place < numberOfPlaces; place++) {
 						 Location location = new Location(floor, row, place);
@@ -96,7 +102,6 @@ public class CarParkView extends JPanel {
 					 }
 				 }
 			 }
-			 doOnce = false;
 		 }
 		 repaint();
 	 }
@@ -108,7 +113,7 @@ public class CarParkView extends JPanel {
 		 graphics.setColor(color);
 		 graphics.fillRect(
 				 location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20,
-				 40 + location.getPlace() * 10,
+				 paddingTop + location.getPlace() * 10,
 				 20 - 1,
 				 10 - 1); // TODO use dynamic size or constants
 	 }
@@ -122,11 +127,11 @@ public class CarParkView extends JPanel {
 	 }
 	 	 
 	 private void drawLinesAroundFloors(Graphics g, int floor) {
-		 int startX = 50 + (floor * floorWidth);
-		 int startY = 10;
+		 int startX = 30 + (floor * floorWidth);
+		 int startY = paddingTop - 40;
 		 
-		 int rowSize = (numberOfRows * 32) + 50;
-		 int placeSize = (numberOfPlaces * 10) + 75;
+		 int rowSize = (numberOfRows * 32) + 30;
+		 int placeSize = (numberOfPlaces * 10) + 50;
 		 
 		 g.drawRect(startX, startY, rowSize, placeSize);//posX, posY, width, height
 	 }
@@ -146,6 +151,6 @@ public class CarParkView extends JPanel {
 		 
 		 this.add(floorLabel);
 		 int fontsize = floorLabel.getFont().getSize();
-		 floorLabel.setBounds((floorWidth * (floor+1)) - (fontsize + 175), 5, 200, fontsize);
+		 floorLabel.setBounds((floorWidth * (floor+1)) - (fontsize + 175), paddingTop - 30, 200, fontsize);
 	 }
 }
