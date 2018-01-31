@@ -19,7 +19,7 @@ public class QueueView extends JPanel{
 		this.setBackground(Color.white);
 		this.q1.setBackground(Color.white);
 		this.q2.setBackground(Color.white);
-		this.setBorder(new EmptyBorder(10, 0, 35, 0));//top,left,bottom,right
+		this.setBorder(new EmptyBorder(0, 0, 10, 0));//top,left,bottom,right
 	}
 	public void updateView() {
 		q1 .updateView();

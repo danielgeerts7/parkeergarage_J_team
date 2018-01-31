@@ -34,6 +34,7 @@ public class MainView {
 	private QueueView queueView;
 	public JPanel buttonPane;
 	private JPanel northView;
+	private JPanel centerView;
 	public LineChartView lineChartView;
 	public PieChart pieChartView;
 	public JButton resume;
@@ -68,6 +69,7 @@ public class MainView {
 		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
 		northView = new JPanel();
+		centerView = new JPanel();
 		lineChartView = new LineChartView();
 		pieChartView = new PieChart();	
 		textInfoView = new TextInformationView();
@@ -76,14 +78,14 @@ public class MainView {
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
 		
-
-		
 		northView.setLayout(new BorderLayout());
 		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
-		northView.add(textInfoView, BorderLayout.NORTH);
-		northView.add(queueView, BorderLayout.CENTER);
-		northView.add(buttonPane, BorderLayout.SOUTH);
+		northView.add(textInfoView, BorderLayout.CENTER);
+		northView.add(queueView, BorderLayout.SOUTH);
 		
+		centerView.setLayout(new BorderLayout());
+		centerView.add(buttonPane, BorderLayout.NORTH);
+		centerView.add(carParkView, BorderLayout.CENTER);
 		
 		buttonPane.add(resume);
 		buttonPane.add(pause);
@@ -94,11 +96,11 @@ public class MainView {
 		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
-		contentPane.add(carParkView, BorderLayout.CENTER);
-		contentPane.add(legendaView, BorderLayout.WEST);
 		contentPane.add(northView, BorderLayout.NORTH);
-		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);
+		contentPane.add(centerView, BorderLayout.CENTER);
+		contentPane.add(legendaView, BorderLayout.WEST);
 		contentPane.add(pieChartView, BorderLayout.EAST);
+		contentPane.add(lineChartView.panel, BorderLayout.SOUTH);	
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();

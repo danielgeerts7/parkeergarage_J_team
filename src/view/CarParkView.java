@@ -90,8 +90,8 @@ public class CarParkView extends JPanel {
 	 private void drawPlace(Graphics graphics, Location location, Color color) {
 		 graphics.setColor(color);
 		 graphics.fillRect(
-				 location.getFloor() * 260 + (1 + (int)Math.floor(location.getRow() * 0.5)) * 75 + (location.getRow() % 2) * 20,
-				 60 + location.getPlace() * 10,
+				 location.getFloor() * 250 + (1 + (int)Math.floor(location.getRow() * 0.5)) * 60 + (location.getRow() % 2) * 20,
+				 50 + location.getPlace() * 10,
 				 20 - 1,
 				 10 - 1); // TODO use dynamic size or constants
 	 }
