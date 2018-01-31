@@ -40,6 +40,8 @@ public class Model extends Thread{
 	int weekendArrivals = 200; // average number of arriving cars per hour
 	int weekDayPassArrivals= 50; // average number of arriving cars per hour
 	int weekendPassArrivals = 5; // average number of arriving cars per hour
+	int weekDayReservArrivals = 80;
+	int weekendReservArrivals = 160;
 	
 	
 	
@@ -52,6 +54,7 @@ public class Model extends Thread{
 	private int tickPause = 100;
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
+	private static final String RESERV = "3";
 	
 	private int currentTick = 0;
 	private double priceToPayPerMinuteWhenParked = 0.1;
@@ -202,6 +205,11 @@ public class Model extends Thread{
 		
 		numberOfCars = getNumberOfCars(getWeekDayPassArrivals(), getWeekendPassArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, PASS);
+		
+		numberOfCars = getNumberOfCars(getWeekDayReservArrivals(), getWeekendReservArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
+		addArrivingCars(numberOfCars, RESERV);
+		
+		
 	}
 	
 	private int enactModifier(int q) {
@@ -228,6 +236,12 @@ public class Model extends Thread{
 			Location freeLocation = getFirstFreeLocationPass();
 			setCarAt(freeLocation, car);
 			i++;
+			}
+			else if (car instanceof ReservCar) {
+			Location freeLocation = getFirstFreeLocation();
+			setCarAt(freeLocation, car);
+			i++;
+				
 			}
 			else {
 			Location freeLocation = getFirstFreeLocation();
@@ -285,7 +299,12 @@ public class Model extends Thread{
 			for (int i = 0; i < numberOfCars; i++) {
 				getEntrancePassQueue().addCar(new ParkingPassCar());
 			}
-			break;	            
+			break;	  
+		case RESERV:
+			for (int i = 0; i < numberOfCars; i++) {
+				getEntrancePassQueue().addCar(new ReservCar());
+			}
+			break;
 		}
 	}
 
@@ -450,6 +469,14 @@ public class Model extends Thread{
 		return weekendPassArrivals;
 	}
 
+	public int getWeekDayReservArrivals() {
+		return weekDayReservArrivals;
+	}
+
+	public int getWeekendReservArrivals() {
+		return weekendReservArrivals;
+	}
+	
 	public Car[][][] getCars() {
 		return cars;
 	}

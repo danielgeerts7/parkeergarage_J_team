@@ -9,6 +9,7 @@ public abstract class Car {
     private Location location;
     private int minutesLeft;
     private int minutesParked;
+    protected int randomReserveTime;
     private boolean isPaying;
     private boolean hasToPay;
 
@@ -17,6 +18,7 @@ public abstract class Car {
      */
     public Car() {
     	minutesParked = 0;
+    	randomReserveTime = 0;
     }
 
     public Location getLocation() {
@@ -33,6 +35,14 @@ public abstract class Car {
 
     public void setMinutesLeft(int minutesLeft) {
         this.minutesLeft = minutesLeft;
+    }
+    
+    public void setReserveTime(int randomReserveTime) {
+    	this.randomReserveTime = randomReserveTime;
+    }
+    
+    public int getReserveTime() {
+    	return randomReserveTime;
     }
     
     public boolean getIsPaying() {
@@ -52,8 +62,11 @@ public abstract class Car {
     }
 
     public void tick() {
-    	minutesParked++;
-        minutesLeft--;
+    	if (randomReserveTime < 1) {
+    		minutesParked++;
+        	minutesLeft--;
+    	}
+        randomReserveTime--;
     }
     
     public int getMinutesParked() {

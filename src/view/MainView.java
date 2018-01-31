@@ -37,6 +37,7 @@ public class MainView {
 	public JButton plusHundredTicks;
 	
 	private TextInformationView textInfoView;
+	private LegendaView legendaView;
 	
 	public MainView(Model model, JFrame frame, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		this.frame = frame;
@@ -53,10 +54,14 @@ public class MainView {
 		northView = new JPanel();
 		
 		textInfoView = new TextInformationView();
+		legendaView = new LegendaView();
+		
+
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(textInfoView, BorderLayout.NORTH);
 		northView.add(queueView, BorderLayout.CENTER);
+		
 		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
@@ -67,6 +72,7 @@ public class MainView {
 		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
+		contentPane.add(legendaView, BorderLayout.WEST);
 		contentPane.add(carParkView, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
@@ -85,6 +91,7 @@ public class MainView {
         carParkView.updateView();
         textInfoView.updateInfo(model);
         queueView.updateView();
+        
     }
 
 }
