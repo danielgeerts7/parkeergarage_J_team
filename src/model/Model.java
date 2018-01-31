@@ -393,6 +393,9 @@ public class Model extends Thread{
 	}
 
 	private boolean locationIsValid(Location location) {
+		if (location == null) {
+			return false;
+		}
 		int floor = location.getFloor();
 		int row = location.getRow();
 		int place = location.getPlace();
