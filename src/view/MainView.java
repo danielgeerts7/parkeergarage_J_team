@@ -38,6 +38,7 @@ public class MainView {
 	public JButton plusHundredTicks;
 	
 	private TextInformationView textInfoView;
+	private LegendaView legendaView;
 	
 	/**
 	 * Set every variable that does not have a value yet
@@ -66,11 +67,15 @@ public class MainView {
 		northView = new JPanel();
 		
 		textInfoView = new TextInformationView();
+		legendaView = new LegendaView();
+		
+
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(textInfoView, BorderLayout.CENTER);
 		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
 		northView.add(queueView, BorderLayout.SOUTH);
+		
 		
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
@@ -81,6 +86,7 @@ public class MainView {
 		
 		Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(width, height));
+		contentPane.add(legendaView, BorderLayout.WEST);
 		contentPane.add(carParkView, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
 		contentPane.add(northView, BorderLayout.NORTH);
@@ -99,6 +105,7 @@ public class MainView {
         carParkView.updateView();
         textInfoView.updateInfo(model);
         queueView.updateView();
+        
     }
 
 }

@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import model.AdHocCar;
 import model.Model;
 import model.ParkingPassCar;
+import model.ReservCar;
 
 /**
  * This class shows some information on the top side of the application
@@ -23,9 +24,9 @@ public class TextInformationView extends JPanel {
 	private static JLabel currentDay, timeTitle, tickTitle, timeLabel, tickLabel;
 	
 	// Title of current parked cars
-	private static JLabel currentParkedCarsTitle, currentParkedPayingCarsTitle, currentParkedPassholderCarsTitle;
+	private static JLabel currentParkedCarsTitle, currentParkedPayingCarsTitle, currentParkedPassholderCarsTitle, currentParkedReservCarsTitle;
 	// Info label of current parked cars
-	private static JLabel currentParkedCarsLabel, currentParkedPayingCarsLabel, currentParkedPassholderCarsLabel;
+	private static JLabel currentParkedCarsLabel, currentParkedPayingCarsLabel, currentParkedPassholderCarsLabel,currentParkedReservCarsLabel ;
 	
 	private static JLabel carQueueTitle, carPassholderQueueTitle, carQueueLabel, carPassholderQueueLabel;
 	private static JLabel earnedMoneyTitle, expectedToBeEarnedMoneyTitle, earnedMoney, expectedToBeEarnedMoney;
@@ -53,12 +54,15 @@ public class TextInformationView extends JPanel {
         currentParkedCarsTitle = new JLabel("Total parked cars: ");
     	currentParkedPayingCarsTitle = new JLabel("Total parked paying cars: ");
         currentParkedPayingCarsTitle.setForeground(Color.red);
+    	currentParkedReservCarsTitle = new JLabel("Total reserved parkingspots: ");
+        currentParkedReservCarsTitle.setForeground(Color.orange);
     	currentParkedPassholderCarsTitle = new JLabel("Total parked pass holders: ");
     	currentParkedPassholderCarsTitle.setForeground(Color.blue);
     	// Information of the current parked cars
     	currentParkedCarsLabel = new JLabel("");
     	currentParkedPayingCarsLabel = new JLabel("");
     	currentParkedPassholderCarsLabel = new JLabel("");
+    	currentParkedReservCarsLabel = new JLabel("");
     	
     	// Car queue title
     	carQueueTitle = new JLabel("Current paying cars waiting: ");
@@ -105,6 +109,8 @@ public class TextInformationView extends JPanel {
         c.gridy = 2;
         this.add(currentParkedPassholderCarsTitle, c);
         c.gridy = 3;
+        this.add(currentParkedReservCarsTitle, c);
+        c.gridy = 4;
         this.add(currentParkedCarsTitle, c);
         c.gridx = 4;
         c.gridy = 1;
@@ -112,6 +118,8 @@ public class TextInformationView extends JPanel {
         c.gridy = 2;
         this.add(currentParkedPassholderCarsLabel, c);
         c.gridy = 3;
+        this.add(currentParkedReservCarsLabel, c);
+        c.gridy = 4;
         this.add(currentParkedCarsLabel, c);
 
         
@@ -155,9 +163,11 @@ public class TextInformationView extends JPanel {
     	// Update current parked cars information
     	int parkedAdHocCars = model.getCurrentCarsParkedOfClass(AdHocCar.class);
     	int parkedPassholderCars = model.getCurrentCarsParkedOfClass(ParkingPassCar.class);
+    	int currentParkedReservCars = model.getCurrentCarsParkedOfClass(ReservCar.class);
     	currentParkedCarsLabel.setText(Integer.toString(parkedAdHocCars + parkedPassholderCars));
     	currentParkedPayingCarsLabel.setText(Integer.toString(parkedAdHocCars));
     	currentParkedPassholderCarsLabel.setText(Integer.toString(parkedPassholderCars));
+    	currentParkedReservCarsLabel.setText(Integer.toString(currentParkedReservCars));
     	
     	// Update cars in queue information
     	carQueueLabel.setText(Integer.toString(model.getEntranceCarQueue().carsInQueue()));
