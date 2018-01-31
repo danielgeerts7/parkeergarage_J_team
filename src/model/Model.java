@@ -323,6 +323,9 @@ public class Model extends Thread{
 		if (!locationIsValid(location)) {
 			return false;
 		}
+		if (location == null || car == null) {
+			return false;
+		}
 		Car oldCar = getCarAt(location);
 		if (oldCar == null) {
 			setCarAt(location.getFloor(), location.getRow(), location.getPlace(), car);
