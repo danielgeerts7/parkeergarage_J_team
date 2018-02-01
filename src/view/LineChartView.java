@@ -1,14 +1,14 @@
 package view;
 
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class LineChartView extends JPanel {
@@ -31,6 +31,7 @@ public class LineChartView extends JPanel {
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
 		CategoryAxis range = plot.getDomainAxis();
 		range.setVisible(false);
+		plot.getRenderer().setSeriesPaint(2, Color.orange);
 		
 		panel = new ChartPanel(chart);	
 	}

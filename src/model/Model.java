@@ -625,6 +625,7 @@ public class Model extends Thread{
 		pauseSimulator();
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
+		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ReservCar.class), "Cars with reserved parking spots", Integer.toString(getCurrentTick()));
 		resumeSimulator();
 	}
 
@@ -633,7 +634,7 @@ public class Model extends Thread{
 		mainView.pieChartView.dataset.setValue("Paying cars", getCurrentCarsParkedOfClass(AdHocCar.class));
 		mainView.pieChartView.dataset.setValue("Parking pass holders", getCurrentCarsParkedOfClass(ParkingPassCar.class));
 		mainView.pieChartView.dataset.setValue("Free spots", numberOfOpenSpots);
-		mainView.pieChartView.chart.fireChartChanged(); 
+		mainView.pieChartView.dataset.setValue("Cars with reserved parking spots", getCurrentCarsParkedOfClass(ReservCar.class));
 		resumeSimulator();
 	}
 }
