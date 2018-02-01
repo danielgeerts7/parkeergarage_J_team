@@ -111,6 +111,7 @@ public class CarParkView extends JPanel {
 	 */
 	private void drawPlace(Graphics graphics, Location location, Color color) {
 		graphics.setColor(color);
+		//draw the car rectangle
 		graphics.fillRect(
 				location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20,
 				paddingTop + location.getPlace() * 15,
@@ -118,9 +119,22 @@ public class CarParkView extends JPanel {
 				10 - 1);
 		if (color != Color.white && color != Color.lightGray) {
 			graphics.setColor(Color.black);
+			//draw the car windows
+			graphics.fillRect(
+					location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 5,
+					paddingTop + location.getPlace() * 15 + 1,
+					4,
+					7);
+			
+			graphics.fillRect(
+					location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 12,
+					paddingTop + location.getPlace() * 15 + 1,
+					3,
+					7);
 		} else {
 			graphics.setColor(new Color(238,238,238));
 		}
+		//draw the car wheels
 		graphics.fillRect(location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 2,
 				paddingTop + location.getPlace() * 15 - 1,
 				4,
@@ -140,6 +154,9 @@ public class CarParkView extends JPanel {
 				paddingTop + location.getPlace() * 15 + 9,
 				4,
 				1);
+		
+		
+		
 	}
 
 	public CarQueue getAHCQ() {
