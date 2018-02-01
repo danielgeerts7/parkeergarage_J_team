@@ -15,7 +15,6 @@ public class PieChart extends JPanel{
 	public DefaultPieDataset dataset;
 	public JFreeChart chart;
 	public PiePlot plot;
-	public Dimension size = new Dimension(680, 350);
 	
     public PieChart() {
         super();
@@ -41,11 +40,5 @@ public class PieChart extends JPanel{
         plot.setSectionPaint("Cars with reserved parking spots", Color.orange);
         
         add(new ChartPanel(chart));
-    }
-    
-    @Override
-    public Dimension getPreferredSize() {
-        // given some values of w & h
-        return size;
     }
 }
