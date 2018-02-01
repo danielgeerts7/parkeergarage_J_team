@@ -10,12 +10,12 @@ import javax.swing.JPanel;
 
 
 
-public class LegendaView extends JPanel{
+public class LegendView extends JPanel{
 
 	
 	
 
-	public LegendaView() {
+	public LegendView() {
 		setPreferredSize(new Dimension(230, 50));
 	}
 		public void paintComponent(Graphics g) {

@@ -42,7 +42,7 @@ public class MainView {
 	public JButton plusHundredTicks;
 	
 	private TextInformationView textInfoView;
-	private LegendaView legendaView;
+	private LegendView legendaView;
 	
 	/**
 	 * Set every variable that does not have a value yet
@@ -74,7 +74,7 @@ public class MainView {
 		lineChartView = new LineChartView();
 		pieChartView = new PieChart();	
 		textInfoView = new TextInformationView();
-		legendaView = new LegendaView();
+		legendaView = new LegendView();
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
