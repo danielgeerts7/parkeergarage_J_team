@@ -5,11 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 // import own classes
 import controller.CarQueue;
 import model.Car;
+import model.DoubleParkedCar;
 import model.Location;
 import model.Model;
 
@@ -26,7 +28,7 @@ public class CarParkView extends JPanel {
 	
 	private int floorWidth = 250;
 	private int rowWidth = 60;
-	private int paddingTop = 50;
+	private int paddingTop = 45;
 	
 	private boolean doOnce = true;
 
@@ -92,13 +94,23 @@ public class CarParkView extends JPanel {
 		 }
 		 if (carParkImage != null) {
 			 Graphics graphics = carParkImage.getGraphics();
+			 drawBackgroundGray(graphics, d);
+
 			 for(int floor = 0; floor < numberOfFloors; floor++) {
 				 for(int row = 0; row < numberOfRows; row++) {
 					 for(int place = 0; place < numberOfPlaces; place++) {
 						 Location location = new Location(floor, row, place);
-						 Car car = model.getCarAt(location);
-						 Color color = car == null ? Color.white : car.getColor();
-						 drawPlace(graphics, location, color);
+						 Car car = model.getCarAt(location, true);
+						 if (car instanceof DoubleParkedCar == false) {
+							 if (car != null && car.isDoubleParked()) {
+								 drawPlace(graphics, location, DoubleParkedCar.getStaticColor(), true);
+							 } else {
+								 Color color = car == null ? Color.white : car.getColor();
+								 drawPlace(graphics, location, color, false);
+							 }
+						 } else {
+							 //drawPlace(graphics, location, Color.ORANGE, false);
+						 }
 					 }
 				 }
 			 }
@@ -109,13 +121,26 @@ public class CarParkView extends JPanel {
 	 /**
 	  * Paint a place on this car park view in a given color.
 	  */
-	 private void drawPlace(Graphics graphics, Location location, Color color) {
+	 private void drawPlace(Graphics graphics, Location location, Color color, boolean doubleParked) {
+		 int offset = 0;
+		 if (doubleParked) {
+			 offset = 5;
+		 }
+		 
 		 graphics.setColor(color);
 		 graphics.fillRect(
 				 location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20,
-				 paddingTop + location.getPlace() * 10,
+				 (paddingTop + location.getPlace() * 10) + offset,
 				 20 - 1,
-				 10 - 1); // TODO use dynamic size or constants
+				 10 - 1);
+	 }
+	 
+	 /**
+	  * Paint a place on this car park view in a given color.
+	  */
+	 private void drawBackgroundGray(Graphics graphics, Dimension size) {
+		 graphics.setColor(new Color(238, 238, 238));
+		 graphics.fillRect(0, 0, size.width, size.height);
 	 }
 	 
 	 public CarQueue getAHCQ() {
@@ -130,7 +155,7 @@ public class CarParkView extends JPanel {
 		 int startX = 30 + (floor * floorWidth);
 		 int startY = paddingTop - 40;
 		 
-		 int rowSize = (numberOfRows * 32) + 30;
+		 int rowSize = (numberOfRows * (rowWidth/2)) + 40;
 		 int placeSize = (numberOfPlaces * 10) + 50;
 		 
 		 g.drawRect(startX, startY, rowSize, placeSize);//posX, posY, width, height
