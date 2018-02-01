@@ -41,7 +41,6 @@ public class Model extends Thread{
 	int weekendPassArrivals = 5; // average number of arriving cars per hour
 	int weekDayReservArrivals = 80;
 	int weekendReservArrivals = 160;
-	
 
 	private int numberOfFloors;
 	private int numberOfRows;

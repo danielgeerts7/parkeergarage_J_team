@@ -48,8 +48,8 @@ public class LegendView extends JPanel{
 		g.setColor(Color.orange);
 		g.fillRect(25, 165, 40, 20);
 		g.setColor(Color.black);
-		g.fillRect(31, 162, 8, 2);
-		g.fillRect(51, 162, 8, 2);
+		g.fillRect(31, 163, 8, 2);
+		g.fillRect(51, 163, 8, 2);
 		g.fillRect(31, 185, 8, 2);
 		g.fillRect(51, 185, 8, 2);		
 		g.fillRect(35, 167, 10, 16);
