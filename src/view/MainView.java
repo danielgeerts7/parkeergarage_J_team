@@ -110,8 +110,6 @@ public class MainView {
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        
-        System.out.println(frame.getBackground());
 
         updateView();
     }

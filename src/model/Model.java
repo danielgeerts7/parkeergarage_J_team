@@ -1,6 +1,7 @@
 // define package name
 package model;
 
+import java.util.HashMap;
 //import java classes
 import java.util.Random;
 
@@ -27,18 +28,18 @@ public class Model extends Thread{
 	private CarQueue paymentCarQueue;
 	private CarQueue exitCarQueue;
 
-	private int day = 0;
-	private int hour = 0;
-	private int minute = 0;
+	private int day;
+	private int hour;
+	private int minute;
 
-	int enterSpeed = 3; // number of cars that can enter per minute
-	int paymentSpeed = 7; // number of cars that can pay per minute
-	int exitSpeed = 5; // number of cars that can leave per minute
+	int enterSpeed; // number of cars that can enter per minute
+	int paymentSpeed; // number of cars that can pay per minute
+	int exitSpeed; // number of cars that can leave per minute
 
-	int weekDayArrivals= 100; // average number of arriving cars per hour
-	int weekendArrivals = 200; // average number of arriving cars per hour
-	int weekDayPassArrivals= 50; // average number of arriving cars per hour
-	int weekendPassArrivals = 5; // average number of arriving cars per hour
+	int weekDayArrivals; // average number of arriving cars per hour
+	int weekendArrivals; // average number of arriving cars per hour
+	int weekDayPassArrivals; // average number of arriving cars per hour
+	int weekendPassArrivals; // average number of arriving cars per hour
 	int weekDayReservArrivals = 80;
 	int weekendReservArrivals = 160;
 
@@ -56,27 +57,46 @@ public class Model extends Thread{
 	private static final String RESERV = "3";
 	
 	private int currentTick = 0;
-	private double priceToPayPerMinuteWhenParked = 0.1;
+	private double priceToPayPerMinuteWhenParked;
 	
 	private long moneyMade = 0;
 	private long expectedMoneyToBeMade = 0;
+	private HashMap<Integer, SpecialDay> specialDays;
 	
 	private PlaySongController playSongController;
 	private String audioFilePath = "media/The-A-Team-theme-song.wav";
-	
-	// Create the application title for the JFrame in MainView
-	private String ApplicationTitle = "The J-Team";
+	private String ApplicationTitle;
+
+	// All views that are used in this application
 	public MainView mainView;
 
-	public Model(int numberOfFloors, int numberOfRows, int numberOfPlaces, boolean playSound) {
+	public Model(HashMap<Integer, SpecialDay> specialDays, HashMap<String, Integer> values, String ApplicationTitle, double pricetoPayperMinuteWhenParked, boolean playSound) {
 		entranceCarQueue = new CarQueue();
 		entrancePassQueue = new CarQueue();
 		paymentCarQueue = new CarQueue();
 		exitCarQueue = new CarQueue();
+		
+		numberOfFloors = values.get("floors");
+		numberOfRows = values.get("rows");
+		numberOfPlaces = values.get("places");
+		
+		day = values.get("days");
+		hour = values.get("hours");
+		minute = values.get("minutes");
+		
+		enterSpeed = values.get("enterSpeed");
+		paymentSpeed = values.get("paymentSpeed");
+		exitSpeed = values.get("exitSpeed");
+		
+		weekDayArrivals = values.get("weekDayArrivals");
+		weekendArrivals = values.get("weekendArrivals");
+		weekDayPassArrivals = values.get("weekDayPassArrivals");
+		weekendPassArrivals = values.get("weekendPassArrivals");
+		
+		this.priceToPayPerMinuteWhenParked = pricetoPayperMinuteWhenParked;
+		this.ApplicationTitle = ApplicationTitle;
 
-		this.numberOfFloors = numberOfFloors;
-		this.numberOfRows = numberOfRows;
-		this.numberOfPlaces = numberOfPlaces;
+		this.specialDays = specialDays;
 
 		this.numberOfOpenSpots = numberOfFloors * numberOfRows * numberOfPlaces;
 		cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
@@ -204,8 +224,7 @@ public class Model extends Thread{
 		}
 	}
 
-	private void carsArriving(){
-		//System.out.println(qModifier + " " + entranceCarQueue.carsInQueue());
+	private void carsArriving(){		
 
 		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals()) * (enactModifier(entranceCarQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, AD_HOC);
@@ -220,13 +239,13 @@ public class Model extends Thread{
 	}
 
 	private int enactModifier(int q) {
-		if (q > 15) {
+		if (q > 12) {
 			return 0;
 		}
-		if(q > 12) {
+		if(q > 10) {
 			return 25;
 		}
-		if (q > 10)
+		if (q > 6)
 			return 50;
 
 		else{
@@ -445,10 +464,22 @@ public class Model extends Thread{
 
 	public int getNumberOfCars(int weekDay, int weekend){
 		Random random = new Random();
-
+		
 		// Get the average number of cars that arrive per hour.
-		int averageNumberOfCarsPerHour = day < 5 ? weekDay : weekend;
+		int highestPoint = day < 5 ? weekDay : weekend;
+		int averageNumberOfCarsPerHour;
+		
+		double lowestPoint = 15;
+		double amp = (highestPoint - lowestPoint) / 2.0;
+		double evenPoint = amp + lowestPoint;
+		averageNumberOfCarsPerHour = (int)(evenPoint + amp * Math.sin(6.28/24 * (hour-6)));
+		averageNumberOfCarsPerHour = averageNumberOfCarsPerHour;
 
+		if(specialDays.containsKey(day)) {
+			averageNumberOfCarsPerHour += specialDays.get(day).getTraffic(hour);
+		}
+
+		
 		// Calculate the number of cars that arrive this minute.
 		double standardDeviation = averageNumberOfCarsPerHour * 0.3;
 		double numberOfCarsPerHour = averageNumberOfCarsPerHour + random.nextGaussian() * standardDeviation;
