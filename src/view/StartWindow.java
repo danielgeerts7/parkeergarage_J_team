@@ -45,6 +45,11 @@ public class StartWindow extends JFrame{
 	private JFormattedTextField weekendArrivals;
 	private JFormattedTextField weekDayPassArrivals;
 	private JFormattedTextField weekendPassArrivals;
+	private JFormattedTextField weekDayReservArrivals;
+	private JFormattedTextField weekendReservArrivals;
+
+	private JCheckBox fullscreen;
+	private JCheckBox playMusic;
 	
 	private JFormattedTextField pricetoPayperMinuteWhenParked;
 
@@ -68,13 +73,15 @@ public class StartWindow extends JFrame{
 		
 		numberFields = new ArrayList<>();
 		
-		setPreferredSize(new Dimension(500,600));
+		setPreferredSize(new Dimension(550,850));
 		setResizable(true);
 		contentPane = this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		createInputFields();
 		fillSpecialDays();
+		contentPane.add(new ImageComponent("media/The-J-Team_logo.png", 4), BorderLayout.NORTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 		pack();
 		setVisible(true);
 	}
@@ -132,38 +139,46 @@ public class StartWindow extends JFrame{
 		createLabel("weekendArrivals: ", 2, 5, inputPanel);
 		createLabel("weekDayPassArrivals: ", 2, 6, inputPanel);
 		createLabel("weekendPassArrivals: ", 2, 7, inputPanel);
+		createLabel("weekDayReservArrivals: ", 2, 8, inputPanel);
+		createLabel("weekendReservArrivals: ", 2, 9, inputPanel);
 		
 		weekDayArrivals = createInput(115, 3, 4, inputPanel);
 		weekendArrivals = createInput(200, 3, 5, inputPanel);
 		weekDayPassArrivals = createInput(60, 3, 6, inputPanel);
 		weekendPassArrivals = createInput(20, 3, 7, inputPanel);
+		weekDayReservArrivals = createInput(80, 3, 8, inputPanel);
+		weekendReservArrivals = createInput(160, 3, 9, inputPanel);
 		
-		createBox(0,8, inputPanel);
-		
-		createLabel("€/minute when parking: ", 0, 9, inputPanel);
-		pricetoPayperMinuteWhenParked = createDoubleInput(0.015, 1, 9, inputPanel);
-		
-		createLabel("Parking garage name: ", 2, 9, inputPanel);
-		parkingGarageName = createTextInput("The J-Team", 3, 9, inputPanel);
-		
+		fullscreen = createCheckBox("Fullscreen", true, 0, 8, inputPanel);
+		playMusic = createCheckBox("Play Music", false, 0, 9, inputPanel);
+
 		createBox(0,10, inputPanel);
 		
-		JButton start = createButton("START", 0, 11, 2, inputPanel);
+		createLabel("€/minute when parking: ", 0, 11, inputPanel);
+		pricetoPayperMinuteWhenParked = createDoubleInput(0.015, 1, 11, inputPanel);
+		
+		createLabel("Parking garage name: ", 2, 11, inputPanel);
+		parkingGarageName = createTextInput("Cityparking Groningen", 3, 11, inputPanel);
+		
+		createBox(0,12, inputPanel);
+		JButton start = createButton("START", 0, 13, 2, inputPanel);
 		start.addActionListener(e -> start());
 		
-		dayPicker = createComboBox(specialDays, 0, 12, inputPanel);
-		dayPicker.addActionListener(e -> updateSpecialDay(dayPicker.getSelectedIndex()));
-		
-		JButton reset = createButton("RESET", 2,11, 2, inputPanel);
+		JButton reset = createButton("RESET", 2,13, 2, inputPanel);
 		reset.addActionListener(e -> reset());
+		
+		// For creating the special days.
+		
+		dayPicker = createComboBox(specialDays, 0, 14, inputPanel);
+		dayPicker.addActionListener(e -> updateSpecialDay(dayPicker.getSelectedIndex()));
 				
-		JButton changeSpecialDay = createButton("CHANGE", 1, 12, 1, inputPanel);
+		JButton changeSpecialDay = createButton("CHANGE", 1, 14, 1, inputPanel);
 		changeSpecialDay.addActionListener(e -> changeSpecialDay(dayPicker.getSelectedIndex()));
 		
-		JButton addSpecialDay = createButton("ADD SPECIAL DAY", 2, 12, 1, inputPanel);
+		JButton addSpecialDay = createButton("ADD SPECIAL DAY", 2, 14, 1, inputPanel);
 		addSpecialDay.addActionListener(e -> addSpecialDay(dayPicker.getSelectedIndex()));
 		
-		JButton deleteSpecialDay = createButton("DELETE", 3, 12, 1, inputPanel);
+		JButton deleteSpecialDay = createButton("DELETE", 3, 14, 1, inputPanel);
 		deleteSpecialDay.addActionListener(e -> deleteSpecialDay(dayPicker.getSelectedIndex()));
 		
 		contentPane.add(inputPanel, BorderLayout.CENTER);
@@ -272,7 +287,7 @@ public class StartWindow extends JFrame{
 	
 	public void start() {
 		insertIntoHashMap();
-		Model m = new Model(specialDays, values, parkingGarageName.getText(), (Double)pricetoPayperMinuteWhenParked.getValue(), false);
+		Model m = new Model(specialDays, values, parkingGarageName.getText(), (Double)pricetoPayperMinuteWhenParked.getValue(), fullscreen.isSelected() ,playMusic.isSelected());
 		Controller controller = new Controller(m);
 		m.start();
 		setVisible(false);
@@ -297,6 +312,8 @@ public class StartWindow extends JFrame{
 		values.put("weekendArrivals", (int)weekendArrivals.getValue());
 		values.put("weekDayPassArrivals", (int)weekDayPassArrivals.getValue());
 		values.put("weekendPassArrivals", (int)weekendPassArrivals.getValue());	
+		values.put("weekDayReservArrivals", (int)weekDayReservArrivals.getValue());
+		values.put("weekendReservArrivals", (int)weekendReservArrivals.getValue());	
 	}
 	
 	public void reset() {
@@ -316,10 +333,15 @@ public class StartWindow extends JFrame{
 		weekendArrivals.setValue(200);
 		weekDayPassArrivals.setValue(60);
 		weekendPassArrivals.setValue(20);
+		weekDayReservArrivals.setValue(80);
+		weekendReservArrivals.setValue(160);
+		
+		fullscreen.setSelected(false);
+		playMusic.setSelected(false);
 		
 		pricetoPayperMinuteWhenParked.setValue(0.015);
 		
-		parkingGarageName.setText("The J-Team");
+		parkingGarageName.setText("Cityparking Groningen");
 		
 		fillSpecialDays();
 	}
@@ -446,5 +468,13 @@ public class StartWindow extends JFrame{
 		JTextField textField = new JTextField(text);
 		panel.add(textField, grid);
 		return textField;
+	}
+	
+	public JCheckBox createCheckBox(String text, boolean selected, int x, int y, JPanel panel) {
+		grid.gridx = x;
+		grid.gridy = y;
+		JCheckBox checkbox = new JCheckBox(text,selected);
+		panel.add(checkbox, grid);
+		return checkbox;
 	}
 }

@@ -40,10 +40,10 @@ public class Model extends Thread{
 	int weekendArrivals; // average number of arriving cars per hour
 	int weekDayPassArrivals; // average number of arriving cars per hour
 	int weekendPassArrivals; // average number of arriving cars per hour
-	int weekDayReservArrivals = 80;
-	int weekendReservArrivals = 160;
+	int weekDayReservArrivals;
+	int weekendReservArrivals;
 
-	int numberOfDubbleParkedCustomers = 5; // average number of dubble parked customers
+	int numberOfDubbleParkedCustomers = 5; // average number of double parked customers
 
 	private int numberOfFloors;
 	private int numberOfRows;
@@ -70,7 +70,7 @@ public class Model extends Thread{
 	// All views that are used in this application
 	public MainView mainView;
 
-	public Model(HashMap<Integer, SpecialDay> specialDays, HashMap<String, Integer> values, String ApplicationTitle, double pricetoPayperMinuteWhenParked, boolean playSound) {
+	public Model(HashMap<Integer, SpecialDay> specialDays, HashMap<String, Integer> values, String ApplicationTitle, double pricetoPayperMinuteWhenParked,boolean fullscreen, boolean playSound) {
 		entranceCarQueue = new CarQueue();
 		entrancePassQueue = new CarQueue();
 		paymentCarQueue = new CarQueue();
@@ -92,6 +92,8 @@ public class Model extends Thread{
 		weekendArrivals = values.get("weekendArrivals");
 		weekDayPassArrivals = values.get("weekDayPassArrivals");
 		weekendPassArrivals = values.get("weekendPassArrivals");
+		weekDayReservArrivals = values.get("weekDayReservArrivals");
+		weekendReservArrivals = values.get("weekendReservArrivals");
 		
 		this.priceToPayPerMinuteWhenParked = pricetoPayperMinuteWhenParked;
 		this.ApplicationTitle = ApplicationTitle;
@@ -104,7 +106,7 @@ public class Model extends Thread{
 		playSongController = new PlaySongController(audioFilePath, playSound);
 		playSongController.start();
 
-		mainView = new MainView(this, ApplicationTitle, numberOfFloors, numberOfRows, numberOfPlaces);
+		mainView = new MainView(this, ApplicationTitle, fullscreen, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
 
 
@@ -141,14 +143,14 @@ public class Model extends Thread{
 		paused = true;
 	}
 
-	public void resumeSimulator() {
+	public void resumeSimulator(boolean playSound) {
 		if (paused) {
 			synchronized (pauseLock) {
 				paused = false;
 				pauseLock.notifyAll(); // Unblocks thread
 			}
 		}
-    	if (!playSongController.isPlaying() && playSongController.canPlay()) {
+    	if (playSound && !playSongController.isPlaying() && playSongController.canPlay()) {
 			playSongController = new PlaySongController(audioFilePath);
 			playSongController.start();
 		}
@@ -161,7 +163,7 @@ public class Model extends Thread{
 		calculateMoney();
 		if (withSleep) {
 			updatePieChart();
-			updateLineChart();
+			updateLineChart(false);
 			mainView.updateView();
 		}
 		currentTick++;
@@ -180,6 +182,7 @@ public class Model extends Thread{
 	public void tickHundredTimes() {
 		for (int i = 1; i <= 100; i++) {
 			tick(false);
+			updateLineChart(true);
 		}
 	}
 
@@ -700,20 +703,23 @@ public class Model extends Thread{
 		return amountOfCars;
 	}
 
-	public void updateLineChart() {
-		pauseSimulator();
+	public void updateLineChart(boolean hundredTicks) {
+		if (!hundredTicks) {
+			pauseSimulator();
+		}
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ReservCar.class), "Cars with reserved parking spots", Integer.toString(getCurrentTick()));
-		resumeSimulator();
+		if (!hundredTicks) {
+			resumeSimulator(false);
+		}
 	}
-
 	public void updatePieChart() {
 		pauseSimulator();
 		mainView.pieChartView.dataset.setValue("Paying cars", getCurrentCarsParkedOfClass(AdHocCar.class));
 		mainView.pieChartView.dataset.setValue("Parking pass holders", getCurrentCarsParkedOfClass(ParkingPassCar.class));
 		mainView.pieChartView.dataset.setValue("Free spots", numberOfOpenSpots);
 		mainView.pieChartView.dataset.setValue("Cars with reserved parking spots", getCurrentCarsParkedOfClass(ReservCar.class));
-		resumeSimulator();
+		resumeSimulator(false);
 	}
 }

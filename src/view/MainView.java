@@ -22,7 +22,7 @@ public class MainView {
 	// A 16:9 resolution
 	private int width = 1536;
 	private int height = 864;
-	private boolean fullscreen = true;
+	private boolean fullscreen;
 	
 	private JFrame frame;
 	private Model model;
@@ -54,7 +54,7 @@ public class MainView {
 	 * @param numberOfRows
 	 * @param numberOfPlaces
 	 */
-	public MainView(Model model, String applicationName, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
+	public MainView(Model model, String applicationName, boolean fullscreen, int numberOfFloors, int numberOfRows, int numberOfPlaces) {
 		// Create JFrame with title name
 		this.frame = new JFrame(applicationName);
 		

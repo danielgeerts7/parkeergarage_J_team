@@ -45,11 +45,7 @@ public class PlaySongController extends Thread implements LineListener {
 	public void run() {
 		if (canPlay) {
 			if (!isPlaying) {
-				try {
-					play();
-				} catch (Exception e) {
-					System.out.println(e.toString());
-				}
+				play();
 				// Done playing
 				isPlaying = false;
 				System.out.println("Closing music thread!");
