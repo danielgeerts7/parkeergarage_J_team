@@ -16,7 +16,7 @@ public class Controller extends AbstractController {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Resume")) {
-			model.resumeSimulator();
+			model.resumeSimulator(true);
 		}
 		
 		if (e.getActionCommand().equals("Pause")) {
@@ -26,7 +26,7 @@ public class Controller extends AbstractController {
 		if (e.getActionCommand().equals("+100 ticks")) {
 			model.pauseSimulator();
 			model.tickHundredTimes();
-			model.resumeSimulator();
+			model.resumeSimulator(false);
 		}
 	}
 }
