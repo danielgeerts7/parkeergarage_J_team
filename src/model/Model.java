@@ -42,6 +42,8 @@ public class Model extends Thread{
 	int weekDayReservArrivals = 80;
 	int weekendReservArrivals = 160;
 
+	int numberOfDubbleParkedCustomers = 5; // average number of dubble parked customers
+
 	private int numberOfFloors;
 	private int numberOfRows;
 	private int numberOfPlaces;
@@ -166,7 +168,7 @@ public class Model extends Thread{
 			for(int row= 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					Car car = getCarAt(location);
+					Car car = getCarAt(location, false);
 					if (car != null) {
 						car.tick();
 					}
@@ -193,8 +195,8 @@ public class Model extends Thread{
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					Car car = getCarAt(location);
-					if (car != null && car instanceof AdHocCar) {
+					Car car = getCarAt(location, false);
+					if (car != null && (car instanceof AdHocCar || car instanceof ReservCar)) {
 						expectedMoneyToBeMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
 					}
 				}
@@ -243,10 +245,9 @@ public class Model extends Thread{
 				i++;
 			}
 			else if (car instanceof ReservCar) {
-			Location freeLocation = getFirstFreeLocation();
-			setCarAt(freeLocation, car);
-			i++;
-				
+				Location freeLocation = getFirstFreeLocation();
+				setCarAt(freeLocation, car);
+				i++;
 			}
 			else {
 				Location freeLocation = getFirstFreeLocation();
@@ -276,8 +277,13 @@ public class Model extends Thread{
 		int i = 0;
 		while (getPaymentCarQueue().carsInQueue()>0 && i < getPaymentSpeed()){
 			Car car = getPaymentCarQueue().removeCar();
-			// TODO Handle payment.
-			moneyMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
+			if (car instanceof AdHocCar || car instanceof ReservCar) {
+	 			if (car.isDoubleParked()) {
+					moneyMade += 2*(car.getMinutesParked() * priceToPayPerMinuteWhenParked);
+				} else {
+					moneyMade += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
+				}
+			}
 			carLeavesSpot(car);
 			i++;
 		}
@@ -325,25 +331,55 @@ public class Model extends Thread{
 		if (location == null || car == null) {
 			return false;
 		}
-		Car oldCar = getCarAt(location);
-		if (oldCar == null) {
+		Car oldCar = getCarAt(location, false);
+		if (oldCar == null && oldCar instanceof DoubleParkedCar == false) {
 			setCarAt(location.getFloor(), location.getRow(), location.getPlace(), car);
 			car.setLocation(location);
 			numberOfOpenSpotsMinusOne();
+			if (!car.isDoubleParked()) {
+				checkIfCarIsDubbleParked(location, car);
+			}
 			return true;
 		}
 		return false;
+	}
+	
+	private void checkIfCarIsDubbleParked(Location loc, Car car) {
+		Random r = new Random();
+		// Random int between zero and 60 minutes
+		int Low = 0;
+		int High = 60;
+		int result = r.nextInt(High-Low) + Low;
+		
+		if (loc.getPlace() < numberOfPlaces-1) {		
+			Location nextLocation = new Location(loc.getFloor(), loc.getRow(), loc.getPlace() + 1);
+			Car checkCar = cars[nextLocation.getFloor()][nextLocation.getRow()][nextLocation.getPlace()];
+			if (checkCar == null) {
+				if (numberOfDubbleParkedCustomers > result && locationIsValid(nextLocation)) {
+					car.setDoubleParked(true);
+					numberOfOpenSpotsMinusOne();
+				}
+			}
+		}
 	}
 
 	public Car removeCarAt(Location location) {
 		if (!locationIsValid(location)) {
 			return null;
 		}
-		Car car = getCarAt(location);
+		Car car = getCarAt(location, false);
 		if (car == null) {
 			return null;
 		}
 		setCarAt(location.getFloor(), location.getRow(), location.getPlace(), null);
+		if (car.isDoubleParked()) {
+			Location nextParkingSpot = new Location(location.getFloor(), location.getRow(), location.getPlace()+1);
+			if (!locationIsValid(nextParkingSpot)) {
+				return null;
+			}
+			setCarAt(nextParkingSpot.getFloor(), nextParkingSpot.getRow(), nextParkingSpot.getPlace(), null);
+			numberOfOpenSpotsPlusOne();
+		}
 		car.setLocation(null);
 		numberOfOpenSpotsPlusOne();
 		return car;
@@ -357,7 +393,7 @@ public class Model extends Thread{
 				}
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					if (getCarAt(location) == null) {
+					if (getCarAt(location, false) == null) {
 						return location;
 					}
 				}
@@ -370,7 +406,7 @@ public class Model extends Thread{
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					if (getCarAt(location) == null) {
+					if (getCarAt(location, false) == null) {
 						return location;
 					}
 				}
@@ -384,7 +420,7 @@ public class Model extends Thread{
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					Car car = getCarAt(location);
+					Car car = getCarAt(location, false);
 					if (car != null && car.getMinutesLeft() <= 0 && !car.getIsPaying()) {
 						return car;
 					}
@@ -492,7 +528,20 @@ public class Model extends Thread{
 		return cars;
 	}
 
-	public Car getCarAt(Location loc) {
+	public Car getCarAt(Location loc, boolean drawing) {
+		Location oldLoc = new Location(loc.getFloor(), loc.getRow(), loc.getPlace()-1);
+		
+		if (locationIsValid(oldLoc)) {
+			Car car = cars[oldLoc.getFloor()][oldLoc.getRow()][oldLoc.getPlace()];
+			Car doublecar = cars[loc.getFloor()][loc.getRow()][loc.getPlace()];
+			if (car != null && car.isDoubleParked() && doublecar == null) {
+				if (drawing) {
+					return new DoubleParkedCar();
+				} else {
+					return car;
+				}
+			}
+		}
 		return cars[loc.getFloor()][loc.getRow()][loc.getPlace()];
 	}
 
@@ -610,7 +659,7 @@ public class Model extends Thread{
 			for (int row = 0; row < getNumberOfRows(); row++) {
 				for (int place = 0; place < getNumberOfPlaces(); place++) {
 					Location location = new Location(floor, row, place);
-					Car car = getCarAt(location);
+					Car car = getCarAt(location, false);
 					if (car != null && cls.isInstance(car)) {
 						amountOfCars++;
 					}

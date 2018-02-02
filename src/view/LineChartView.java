@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
@@ -33,7 +34,7 @@ public class LineChartView extends JPanel {
 		range.setVisible(false);
 		plot.getRenderer().setSeriesPaint(2, Color.orange);
 		
-		panel = new ChartPanel(chart);	
+		panel = new ChartPanel(chart);
 	}
 
 	private DefaultCategoryDataset createDataset() {

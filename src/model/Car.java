@@ -12,6 +12,7 @@ public abstract class Car {
     protected int randomReserveTime;
     private boolean isPaying;
     private boolean hasToPay;
+    private boolean isDoubleParked;
 
     /**
      * Constructor for objects of class Car
@@ -19,6 +20,7 @@ public abstract class Car {
     public Car() {
     	minutesParked = 0;
     	randomReserveTime = 0;
+    	isDoubleParked = false;
     }
 
     public Location getLocation() {
@@ -71,6 +73,14 @@ public abstract class Car {
     
     public int getMinutesParked() {
         return minutesParked;
+    }
+    
+    public boolean isDoubleParked() {
+    	return this.isDoubleParked;
+    }
+    
+    public void setDoubleParked(boolean isDoubleParked) {
+    	this.isDoubleParked = isDoubleParked;
     }
     
     public abstract Color getColor();

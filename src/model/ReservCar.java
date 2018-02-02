@@ -6,7 +6,9 @@ import java.awt.*;
 
 public class ReservCar extends Car {
 
-	private Color COLOR = Color.lightGray;
+	private static Color COLOR = Color.lightGray;
+	private static Color secondCOLOR = Color.orange;
+	
 	public ReservCar() {
 		Random random = new Random();
 		Random randomReserve = new Random();
@@ -19,9 +21,12 @@ public class ReservCar extends Car {
 
 	public Color getColor(){
 		if (randomReserveTime > 0) {
-		return COLOR;
+			return COLOR;
 		}
-		else return Color.orange;
+		else return secondCOLOR;
 	}
-
+	
+	public static Color getStaticColor(){
+		return secondCOLOR;
+	}
 }

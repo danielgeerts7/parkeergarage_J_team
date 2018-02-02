@@ -90,6 +90,7 @@ public class MainView {
 		centerView.add(legendaView, BorderLayout.WEST);
 		
 		southView.setLayout(new BorderLayout());
+		southView.setPreferredSize(new Dimension(width, 390));
 		southView.add(lineChartView.panel, BorderLayout.CENTER);
 		southView.add(pieChartView, BorderLayout.EAST);
 		
