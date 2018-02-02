@@ -4,6 +4,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -62,6 +64,9 @@ public class MainView {
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		}
 		this.model = model;
+		
+		ImageIcon img = new ImageIcon("media/The-J-Team_icon.png");
+		this.frame.setIconImage(img.getImage());
 		
 		carParkView = new CarParkView(model, numberOfFloors, numberOfRows, numberOfPlaces);
 		carQueueView = new CarQueueView(model.getEntranceCarQueue(), "people to buy a ticket");

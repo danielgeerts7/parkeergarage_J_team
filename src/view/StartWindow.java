@@ -11,7 +11,7 @@ import model.Model;
 import model.SpecialDay;
 
 
-public class StartWindow extends JFrame{
+public class StartWindow extends JFrame {
 	
 	private HashMap<String, Integer> values;
 	private HashMap<Integer, SpecialDay> specialDays;

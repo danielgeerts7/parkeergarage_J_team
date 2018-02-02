@@ -153,6 +153,8 @@ public class Model extends Thread{
 			playSongController.start();
 		}
 	}
+	
+	private int counter = 0;
 
 	private void tick(boolean withSleep) {
 		advanceTime();
@@ -160,8 +162,12 @@ public class Model extends Thread{
 		handleExit();
 		calculateMoney();
 		if (withSleep) {
+			counter++;
 			updatePieChart();
-			updateLineChart();
+			if (counter > 25) {
+				updateLineChart();
+				counter = 0;
+			}
 			mainView.updateView();
 		}
 		currentTick++;
@@ -176,10 +182,17 @@ public class Model extends Thread{
 		}
 		handleEntrance();
 	}
+	
+	private int hundredCounter = 0;
 
 	public void tickHundredTimes() {
 		for (int i = 1; i <= 100; i++) {
 			tick(false);
+			hundredCounter++;
+			if (hundredCounter > 25) {
+				updateLineChart2();
+				hundredCounter = 0;
+			}
 		}
 	}
 
@@ -382,26 +395,26 @@ public class Model extends Thread{
 		}
 	}
 
-	public Car removeCarAt(Location location) {
+	public void removeCarAt(Location location) {
 		if (!locationIsValid(location)) {
-			return null;
+			return;
 		}
 		Car car = getCarAt(location, false);
 		if (car == null) {
-			return null;
+			return;
 		}
 		setCarAt(location.getFloor(), location.getRow(), location.getPlace(), null);
 		if (car.isDoubleParked()) {
 			Location nextParkingSpot = new Location(location.getFloor(), location.getRow(), location.getPlace()+1);
 			if (!locationIsValid(nextParkingSpot)) {
-				return null;
+				return;
 			}
 			setCarAt(nextParkingSpot.getFloor(), nextParkingSpot.getRow(), nextParkingSpot.getPlace(), null);
 			numberOfOpenSpotsPlusOne();
 		}
 		car.setLocation(null);
 		numberOfOpenSpotsPlusOne();
-		return car;
+		car = null;
 	}
 
 	public Location getFirstFreeLocation() {
@@ -699,13 +712,19 @@ public class Model extends Thread{
 		}
 		return amountOfCars;
 	}
-
+	
 	public void updateLineChart() {
 		pauseSimulator();
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
 		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ReservCar.class), "Cars with reserved parking spots", Integer.toString(getCurrentTick()));
 		resumeSimulator();
+	}
+	
+	public void updateLineChart2() {
+    	mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(AdHocCar.class), "Paying Cars", Integer.toString(getCurrentTick()));
+		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ParkingPassCar.class), "ParkingPass Cars", Integer.toString(getCurrentTick()));
+		mainView.lineChartView.dataset.addValue(getCurrentCarsParkedOfClass(ReservCar.class), "Cars with reserved parking spots", Integer.toString(getCurrentTick()));
 	}
 
 	public void updatePieChart() {
