@@ -51,6 +51,7 @@ public class MainView {
 		queueView = new QueueView(carQueueView, carQueueView2);
 		buttonPane = new JPanel();
 		northView = new JPanel();
+
 		
 		textInfoView = new TextInformationView();
 		
