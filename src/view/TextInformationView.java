@@ -28,8 +28,8 @@ public class TextInformationView extends JPanel {
 	// Info label of current parked cars
 	private static JLabel currentParkedTotalCarsLabel, currentParkedPayingCarsLabel, currentParkedPassholderCarsLabel,currentParkedReservCarsLabel ;
 
-	private static JLabel carQueueTitle, carPassholderQueueTitle, carQueueLabel, carPassholderQueueLabel;
-	private static JLabel earnedMoneyTitle, expectedToBeEarnedMoneyTitle, earnedMoney, expectedToBeEarnedMoney;
+	private static JLabel dailyAdHocCarTitle, dailyParkingPassCarTitle, dailyReservCarTitle, carsParkedTodayTitle, dailyAdHocCarLabel, dailyParkingPassCarLabel, dailyReservCarLabel, carsParkedTodayLabel;
+	private static JLabel earnedMoneyTitle, expectedToBeEarnedMoneyTitle, dailyRevenueTitle, earnedMoney, expectedToBeEarnedMoney, dailyRevenueLabel;
 
 	/**
 	 * Constructor for objects of class TextInformationView
@@ -64,21 +64,28 @@ public class TextInformationView extends JPanel {
 		currentParkedPassholderCarsLabel = new JLabel("");
 		currentParkedReservCarsLabel = new JLabel("");
 
-		// Car queue title
-		carQueueTitle = new JLabel("Current paying cars waiting: ");
-		carQueueTitle.setForeground(Color.red);
-		carPassholderQueueTitle = new JLabel("Current pass holders waiting: ");
-		carPassholderQueueTitle.setForeground(Color.blue);
+		// Daily type title
+		dailyAdHocCarTitle = new JLabel("Daily regular customers: ");
+		dailyAdHocCarTitle.setForeground(Color.red);
+		dailyParkingPassCarTitle = new JLabel("Daily parkingpassholders: ");
+		dailyParkingPassCarTitle.setForeground(Color.blue);
+		dailyReservCarTitle = new JLabel("Daily Reservations: ");
+		dailyReservCarTitle.setForeground(Color.ORANGE);
+		carsParkedTodayTitle = new JLabel("Total cars parked today: ");
 		// Car queue information
-		carQueueLabel = new JLabel("");
-		carPassholderQueueLabel = new JLabel("");
+		dailyAdHocCarLabel = new JLabel("");
+		dailyParkingPassCarLabel = new JLabel("");
+		dailyReservCarLabel = new JLabel("");
+		carsParkedTodayLabel = new JLabel(""); 
 
 		// Money title
 		earnedMoneyTitle = new JLabel("Earned money by paying customers: ");
 		earnedMoneyTitle.setForeground(Color.red);
 		expectedToBeEarnedMoneyTitle = new JLabel("Expected money to be earned by the current parking customers: ");
 		expectedToBeEarnedMoneyTitle.setForeground(Color.red);
+		dailyRevenueTitle = new JLabel("Daily revenue: ");
 		// Money real information
+		dailyRevenueLabel = new JLabel("");
 		earnedMoney = new JLabel("");
 		expectedToBeEarnedMoney = new JLabel("");
 
@@ -126,14 +133,22 @@ public class TextInformationView extends JPanel {
 		// add car Queue information
 		c.gridx = 5;
 		c.gridy = 1;
-		this.add(carQueueTitle, c);
+		this.add(dailyAdHocCarTitle, c);
 		c.gridy = 2;
-		this.add(carPassholderQueueTitle, c);
+		this.add(dailyParkingPassCarTitle, c);
+		c.gridy = 3;
+		this.add(dailyReservCarTitle, c);
+		c.gridy = 4;
+		this.add(carsParkedTodayTitle, c);
 		c.gridx = 6;
 		c.gridy = 1;
-		this.add(carQueueLabel, c);
+		this.add(dailyAdHocCarLabel, c);
 		c.gridy = 2;
-		this.add(carPassholderQueueLabel, c);
+		this.add(dailyParkingPassCarLabel, c);
+		c.gridy = 3;
+		this.add(dailyReservCarLabel, c);
+		c.gridy = 4;
+		this.add(carsParkedTodayLabel, c);
 
 		// add car Queue information
 		c.gridx = 7;
@@ -141,11 +156,15 @@ public class TextInformationView extends JPanel {
 		this.add(earnedMoneyTitle, c);
 		c.gridy = 2;
 		this.add(expectedToBeEarnedMoneyTitle, c);
+		c.gridy = 3;
+		this.add(dailyRevenueTitle, c);
 		c.gridx = 8;
 		c.gridy = 1;
 		this.add(earnedMoney, c);
 		c.gridy = 2;
 		this.add(expectedToBeEarnedMoney, c);
+		c.gridy = 3;
+		this.add(dailyRevenueLabel, c);
 	}
 
 	/**
@@ -170,8 +189,10 @@ public class TextInformationView extends JPanel {
 		currentParkedReservCarsLabel.setText(Integer.toString(currentParkedReservCars));
 
 		// Update cars in queue information
-		carQueueLabel.setText(Integer.toString(model.getEntranceCarQueue().carsInQueue()));
-		carPassholderQueueLabel.setText(Integer.toString(model.getEntrancePassQueue().carsInQueue()));
+		dailyAdHocCarLabel.setText(Integer.toString(model.getDailyAdHocCar()));
+		dailyParkingPassCarLabel.setText(Integer.toString(model.getDailyParkingPassCar()));
+		dailyReservCarLabel.setText(Integer.toString(model.getDailyReservCar()));
+		carsParkedTodayLabel.setText(Integer.toString(model.getCarsParkedToday()));
 
 		String euroSign = "\u20ac";
 
@@ -179,5 +200,6 @@ public class TextInformationView extends JPanel {
 		// Something with price and the expected price
 		earnedMoney.setText(euroSign + " " + model.getEarnedMoney() + ".00 ,-");
 		expectedToBeEarnedMoney.setText(euroSign + " " + model.getExpectedMoneyToBeEarned() + ".00 ,-");
+		dailyRevenueLabel.setText(euroSign + model.getDailyRevenue() + ".00 ,-");
 	}
 }

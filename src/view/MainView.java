@@ -8,12 +8,15 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 // Import own made classes
 import model.Model;
 
-/**   
+/**    
  * explain here what this class does
  * 
  * @author danielgeerts7
@@ -39,9 +42,14 @@ public class MainView {
 	private JPanel southView;
 	public LineChartView lineChartView;
 	public PieChart pieChartView;
+	public JMenu file;
+	public JMenuItem save;
+	public JMenuItem exit;
+	public JMenuBar bar;
 	public JButton resume;
 	public JButton pause;
 	public JButton plusHundredTicks;
+	
 	
 	private TextInformationView textInfoView;
 	private LegendView legendaView;
@@ -83,6 +91,10 @@ public class MainView {
 		resume = new JButton("Resume");
 		pause = new JButton("Pause");
 		plusHundredTicks = new JButton("+100 ticks");
+		bar = new JMenuBar();
+		file = new JMenu("File");
+		save = new JMenuItem("Save");
+		exit = new JMenuItem("Exit");
 		
 		northView.setLayout(new BorderLayout());
 		northView.add(new ImageComponent("media/The-J-Team_logo.png", 6), BorderLayout.WEST);
@@ -111,10 +123,15 @@ public class MainView {
 		contentPane.add(northView, BorderLayout.NORTH);
 		contentPane.add(centerView, BorderLayout.CENTER);
 		contentPane.add(southView, BorderLayout.SOUTH);
+		
+		bar.add(file);
+		file.add(save);
+		file.add(exit);
               
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setJMenuBar(bar);
 
         updateView();
     }

@@ -49,20 +49,27 @@ public class Model extends Thread{
 	private int numberOfRows;
 	private int numberOfPlaces;
 	private int numberOfOpenSpots;
+	private int totalOpenParkingSpots;
+	private int carsParkedToday;
 	private Car[][][] cars;
 
 	private int tickPause = 100;
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
 	private static final String RESERV = "3";
-	
+
 	private int currentTick = 0;
 	private double priceToPayPerMinuteWhenParked;
-	
+
+	private long dailyRevenue = 0;
 	private long moneyMade = 0;
 	private long expectedMoneyToBeMade = 0;
 	private HashMap<Integer, SpecialDay> specialDays;
-	
+
+	private int dailyParkingPassCar = 0;
+	private int dailyReservCar = 0;
+	private int dailyAdHocCar = 0;
+
 	private PlaySongController playSongController;
 	private String audioFilePath = "media/The-A-Team-theme-song.wav";
 	private String ApplicationTitle;
@@ -246,11 +253,11 @@ public class Model extends Thread{
 
 		numberOfCars = getNumberOfCars(getWeekDayPassArrivals(), getWeekendPassArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, PASS);
-		
+
 		numberOfCars = getNumberOfCars(getWeekDayReservArrivals(), getWeekendReservArrivals()) * (enactModifier(entrancePassQueue.carsInQueue())/100);
 		addArrivingCars(numberOfCars, RESERV);
-		
-		
+
+
 	}
 
 	private int enactModifier(int q) {
@@ -276,16 +283,20 @@ public class Model extends Thread{
 			if (car instanceof ParkingPassCar) {
 				Location freeLocation = getFirstFreeLocationPass();
 				setCarAt(freeLocation, car);
+				dailyParkingPassCar += 1;
 				i++;
 			}
 			else if (car instanceof ReservCar) {
 				Location freeLocation = getFirstFreeLocation();
 				setCarAt(freeLocation, car);
+				dailyReservCar += 1;
 				i++;
+				
 			}
 			else {
 				Location freeLocation = getFirstFreeLocation();
 				setCarAt(freeLocation, car);
+				dailyAdHocCar += 1;
 				i++;
 			}
 		}
@@ -319,6 +330,13 @@ public class Model extends Thread{
 				}
 			}
 			carLeavesSpot(car);
+			dailyRevenue += car.getMinutesParked() * priceToPayPerMinuteWhenParked;
+			carLeavesSpot(car);
+
+			if(car instanceof ReservCar) {
+				moneyMade += 2;
+				dailyRevenue += 2;
+			}
 			i++;
 		}
 	}
@@ -370,6 +388,7 @@ public class Model extends Thread{
 			setCarAt(location.getFloor(), location.getRow(), location.getPlace(), car);
 			car.setLocation(location);
 			numberOfOpenSpotsMinusOne();
+			carsParkedToday++;
 			if (!car.isDoubleParked()) {
 				checkIfCarIsDubbleParked(location, car);
 			}
@@ -518,6 +537,26 @@ public class Model extends Thread{
 		return numberOfOpenSpots;
 	}
 
+	public int getCarsParkedToday() {
+		return carsParkedToday;
+	}
+
+	public long getDailyRevenue() {
+		return dailyRevenue;
+	}
+
+	public int getDailyParkingPassCar() {
+		return dailyParkingPassCar;
+	}
+
+	public int getDailyReservCar() {
+		return dailyReservCar;
+	}
+
+	public int getDailyAdHocCar() {
+		return dailyAdHocCar;
+	}
+
 	public CarQueue getEntranceCarQueue() {
 		return entranceCarQueue;
 	}
@@ -569,7 +608,7 @@ public class Model extends Thread{
 	public int getWeekendReservArrivals() {
 		return weekendReservArrivals;
 	}
-	
+
 	public Car[][][] getCars() {
 		return cars;
 	}
@@ -613,6 +652,8 @@ public class Model extends Thread{
 		while (hour > 23) {
 			hour -= 24;
 			day++;
+			carsParkedToday = 0;
+			dailyRevenue = 0;
 		}
 		while (day > 6) {
 			day -= 7;
@@ -672,27 +713,27 @@ public class Model extends Thread{
 
 		return completeStr;
 	}
-	
+
 	public String getCurrentDay() {
-        String currentDay = "";
-	
+		String currentDay = "";
+
 		switch (day) {
 		case 0:  currentDay = "Monday";
-        		break;
-        case 1:  currentDay = "Tuesday";
-                 break;
-        case 2:  currentDay = "Wednesday";
-                 break;
-        case 3:  currentDay = "Thursday";
-                 break;
-        case 4:  currentDay = "Friday";
-                 break;
-        case 5:  currentDay = "Saterday";
-                 break;
-        case 6:  currentDay = "Sunday";
-                 break;
+		break;
+		case 1:  currentDay = "Tuesday";
+		break;
+		case 2:  currentDay = "Wednesday";
+		break;
+		case 3:  currentDay = "Thursday";
+		break;
+		case 4:  currentDay = "Friday";
+		break;
+		case 5:  currentDay = "Saterday";
+		break;
+		case 6:  currentDay = "Sunday";
+		break;
 		}
-                 
+
 		return currentDay;
 	}
 
@@ -736,3 +777,4 @@ public class Model extends Thread{
 		resumeSimulator(false);
 	}
 }
+
