@@ -29,7 +29,7 @@ public class CarParkView extends JPanel {
 	private int floorWidth = 250;
 	private int rowWidth = 60;
 	private int paddingTop = 35;
-	private int carOffset = 12;
+	private double carOffset = 11.3;
 
 	private boolean doOnce = true;
 
@@ -130,7 +130,7 @@ public class CarParkView extends JPanel {
 		//draw the car rectangle
 		graphics.fillRect(
 				location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20,
-				 (paddingTop + location.getPlace() * carOffset) + offset,
+				 (int)(paddingTop + location.getPlace() * carOffset) + offset,
 				20 - 1,
 				10 - 1);
 		
@@ -139,13 +139,13 @@ public class CarParkView extends JPanel {
 			
 			graphics.fillRect(
 					location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 5,
-					paddingTop + location.getPlace() * carOffset + 1 + offset,
+					(int)(paddingTop + location.getPlace() * carOffset) + 1 + offset,
 					4,
 					7);
 			
 			graphics.fillRect(
 					location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 12,
-					paddingTop + location.getPlace() * carOffset + 1 + offset,
+					(int)(paddingTop + location.getPlace() * carOffset) + 1 + offset,
 					3,
 					7);
 				 
@@ -155,22 +155,22 @@ public class CarParkView extends JPanel {
 				
 		//draw the car wheels
 		graphics.fillRect(location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 2,
-				paddingTop + location.getPlace() * carOffset - 1 + offset,
+				(int)(paddingTop + location.getPlace() * carOffset) - 1 + offset,
 				4,
 				1);
 
 		graphics.fillRect(location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 12,
-				paddingTop + location.getPlace() * carOffset - 1 + offset,
+				(int)(paddingTop + location.getPlace() * carOffset) - 1 + offset,
 				4,
 				1);
 
 		graphics.fillRect(location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 2,
-				paddingTop + location.getPlace() * carOffset + 9 + offset,
+				(int)(paddingTop + location.getPlace() * carOffset) + 9 + offset,
 				4,
 				1);
 
 		graphics.fillRect(location.getFloor() * floorWidth + (1 + (int)Math.floor(location.getRow() * 0.5)) * rowWidth + (location.getRow() % 2) * 20 + 12,
-				paddingTop + location.getPlace() * carOffset + 9 + offset,
+				(int)(paddingTop + location.getPlace() * carOffset) + 9 + offset,
 				4,
 				1);
 	 }
@@ -196,7 +196,7 @@ public class CarParkView extends JPanel {
 		int startY = paddingTop - 35;
 
 		 int rowSize = (numberOfRows * (rowWidth/2)) + 40;
-		int placeSize = (numberOfPlaces * carOffset) + 40;
+		int placeSize = (int)(numberOfPlaces * carOffset + 37.5);
 
 		g.drawRect(startX, startY, rowSize, placeSize);//posX, posY, width, height
 	}
