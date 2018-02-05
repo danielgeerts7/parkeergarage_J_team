@@ -65,6 +65,8 @@ public class Model extends Thread{
 	private long moneyMade = 0;
 	private long expectedMoneyToBeMade = 0;
 	private HashMap<Integer, SpecialDay> specialDays;
+	
+	private int totalMissedCars = 0;
 
 	private int dailyParkingPassCar = 0;
 	private int dailyReservCar = 0;
@@ -520,6 +522,7 @@ public class Model extends Thread{
 				}
 			}
 		}
+		totalMissedCars++;
 		return null;
 	}
 	
@@ -537,6 +540,7 @@ public class Model extends Thread{
 				}
 			}
 		}
+		totalMissedCars++;
 		return null;
 	}
 
@@ -969,6 +973,13 @@ public class Model extends Thread{
 		mainView.pieChartView.dataset.setValue("Free spots", numberOfOpenSpots);
 		mainView.pieChartView.dataset.setValue("Cars with reserved parking spots", getCurrentCarsParkedOfClass(ReservCar.class));
 		resumeSimulator(false);
+	}
+	
+	/**
+	 * @return total numbers of cars that we have missed
+	 */
+	public int getTotalMissedCars() {
+		return totalMissedCars;
 	}
 }
 
