@@ -26,8 +26,8 @@ import model.Model;
 public class MainView {	
 	
 	// A 16:9 resolution
-	private int width = 1536;
-	private int height = 864;
+	private int width = 1920;
+	private int height = 1080;
 	private boolean fullscreen;
 	
 	private JFrame frame;
