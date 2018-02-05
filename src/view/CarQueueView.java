@@ -9,10 +9,17 @@ import javax.swing.*;
 import controller.CarQueue;
 import model.Car;
 
+/**The visualization of a single queue.
+ * @author Erik Storm
+ * **/
 public class CarQueueView extends JPanel{
 	private CarQueue q;	
 	private String name;
 	
+	/**Creates a view for for a specific CarQueue with a name of the queue.
+	 * @param q The CarQueue.
+	 * @param name The name of the queue.
+	 * **/
 	public CarQueueView(CarQueue q, String name) {
 		this.q = q;
 		this.name = name;
@@ -20,6 +27,9 @@ public class CarQueueView extends JPanel{
 		setPreferredSize(new Dimension(200, 50));
 	}
 	
+	/**Paints the view of the queue.
+	 * @param g The graphics that will be used.
+	 * **/
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawString("Number of cars waiting in the queue for "+ name + " : " + q.carsInQueue(), 20, 20);
@@ -50,6 +60,8 @@ public class CarQueueView extends JPanel{
 		}
 	}
 	
+	/**Updates the view.
+	 * **/
 	public void updateView() {
 		repaint();
 	}
