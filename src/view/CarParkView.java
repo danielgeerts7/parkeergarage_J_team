@@ -15,6 +15,9 @@ import model.DoubleParkedCar;
 import model.Location;
 import model.Model;
 
+/**
+ * Displays the Parking garage from a top down view with the different floors next to each other.
+ */
 
 public class CarParkView extends JPanel {
 
@@ -87,6 +90,9 @@ public class CarParkView extends JPanel {
 
 	}
 
+	/**
+	 * Updates the view of all cars in the parking garage.
+	 */
 	public void updateView() {
 		// Create a new car park image if the size has changed.
 		Dimension d = getSize();
@@ -184,14 +190,25 @@ public class CarParkView extends JPanel {
 		 graphics.fillRect(0, 0, size.width, size.height);
 	}
 
+	/**
+	 * @return The CarQueue for the ticket cars.
+	 */
 	public CarQueue getAHCQ() {
 		return model.getEntranceCarQueue();
 	}
 
+	/**
+	 * @return The CarQueue for pass holders.
+	 */
 	public CarQueue getPPQ() {
 		return model.getEntrancePassQueue();
 	}
 
+	/**
+	 * Draws the lines around each floor for better appearance.
+	 * @param g The graphics on which everything will be painted.
+	 * @param floor The floor where a box will be drawn around.
+	 */
 	private void drawLinesAroundFloors(Graphics g, int floor) {
 		int startX = 30 + (floor * floorWidth);
 		int startY = paddingTop - 35;
@@ -203,6 +220,10 @@ public class CarParkView extends JPanel {
 	}
 
 
+	/**
+	 * Adds labels to each floor.
+	 * @param floor The number of the floor that needs to be named.
+	 */
 	private void addLabelsToTheFloors(int floor) {
 		JLabel floorLabel = new JLabel("Floor " + floor);
 		switch (floor) {

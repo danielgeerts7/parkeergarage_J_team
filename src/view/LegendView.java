@@ -12,12 +12,24 @@ import model.DoubleParkedCar;
 import model.ParkingPassCar;
 import model.ReservCar;
 
+/**
+ *  A view that displays all the car types in a legend form.
+ * @author Florian Molenaars
+ * @version 5-2-2018
+ */
 public class LegendView extends JPanel{
 
+	/**
+	 * Creates a new legend with a set size.
+	 */
 	public LegendView() {
 		setPreferredSize(new Dimension(230, 50));
 	}
 	
+	/**
+	 * Makes the legend display the types of cars.
+	 * @param g Makes the JPanel available for drawing.
+	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setFont(new Font("default", Font.BOLD, 12));
