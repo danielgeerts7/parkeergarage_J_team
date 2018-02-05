@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -39,6 +38,14 @@ public class PieChart extends JPanel{
         plot.setSectionPaint("Free spots", Color.white);
         plot.setSectionPaint("Cars with reserved parking spots", Color.orange);
         
-        add(new ChartPanel(chart));
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setMaximumDrawWidth(400);  
+        chartPanel.setPreferredSize(new Dimension(370, 370));
+        this.add(chartPanel);
+    }
+    
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(600, 400);
     }
 }

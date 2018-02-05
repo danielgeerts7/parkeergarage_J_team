@@ -1,7 +1,10 @@
 package model;
 
-
-
+/**
+ * This class keep track of the parking spot where the customer is parked 
+ *
+ * @version 05-02-2018
+ */
 public class Location {
 
     private int floor;

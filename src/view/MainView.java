@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 // Import own made classes
 import model.Model;
@@ -107,7 +108,7 @@ public class MainView {
 		centerView.add(legendaView, BorderLayout.WEST);
 		
 		southView.setLayout(new BorderLayout());
-		southView.setPreferredSize(new Dimension(width, 390));
+		southView.setPreferredSize(new Dimension(width, 330));
 		southView.add(lineChartView.panel, BorderLayout.CENTER);
 		southView.add(pieChartView, BorderLayout.EAST);
 		
