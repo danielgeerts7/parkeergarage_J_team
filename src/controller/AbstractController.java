@@ -1,11 +1,10 @@
 package controller;
 
 import java.awt.event.ActionListener;
-
 import model.*;
 
 /**   
- * explain here what this class does
+ * This is the superclass for some controller classes
  * 
  * @author danielgeerts7
  * @version 22-01-2018

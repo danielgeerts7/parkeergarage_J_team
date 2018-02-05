@@ -1,30 +1,30 @@
 package controller;
 
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Random;
-
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
-import org.jfree.chart.JFreeChart;
-
 import model.Model;
-import view.PieChart;
 
+/**
+ * This is the controller of the parking garage project.
+ * It controls all button click (click event)
+ *
+ * @author danielgeerts7
+ * @version 05-02-2018
+ */
 public class Controller extends AbstractController {
 
 	Writer writer = null;
+
+	/**
+	 * Assign every buttons action listener to this class
+	 * 
+	 * @param model
+	 */
 	public Controller(Model model) {
 		super(model);
 		model.mainView.resume.addActionListener(this);
@@ -34,17 +34,17 @@ public class Controller extends AbstractController {
 		model.mainView.exit.addActionListener(this);
 	}
 
-
+	/**
+	 * When a button is clicked this method will handle what to do next
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Resume")) {
 			model.resumeSimulator(true);
 		}
-
 		if (e.getActionCommand().equals("Pause")) {
 			model.pauseSimulator();
 		}
-
 		if (e.getActionCommand().equals("+100 ticks")) {
 			model.pauseSimulator();
 			model.tickHundredTimes();
@@ -55,9 +55,12 @@ public class Controller extends AbstractController {
 		}
 		if (e.getActionCommand().equals("Exit")) {
 			System.exit(0);
-
 		}
 	}
+
+	/**
+	 * Save some information to a external file
+	 */
 	public void save() {
 		Random random = new Random();
 		int randomNumber = random.nextInt(1000);
