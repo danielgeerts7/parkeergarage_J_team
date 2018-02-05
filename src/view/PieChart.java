@@ -11,11 +11,22 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
+/**   
+ * This is the class makes a piechart and draws it on the screen.
+ * It extends JPanel and it uses the library JFreeChart
+ * 
+ * @author stijnwesterhof
+ * @version 22-01-2018
+ */
+
 public class PieChart extends JPanel{
 	public DefaultPieDataset dataset;
 	public JFreeChart chart;
 	public PiePlot plot;
 	
+	/**
+	 * Creates a dataset, chart and a plot.
+	 */
     public PieChart() {
         super();
         dataset = new DefaultPieDataset();

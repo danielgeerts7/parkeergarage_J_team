@@ -15,7 +15,7 @@ public abstract class AbstractController implements ActionListener{
 	/**
 	 * Register the model to the controller.
 	 * 
-	 * @param model the model
+	 * @param Model the model
 	 */
 	AbstractController(Model model) {
 		this.model = model;

@@ -1,6 +1,13 @@
 package view;
 
 import java.awt.Color;
+/**   
+ * This is the class creates a linechart and draws it on the screen.
+ * It extends JPanel and it uses the library JFreeChart
+ * 
+ * @author stijnwesterhof
+ * @version 22-01-2018
+ */
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
@@ -17,7 +24,10 @@ public class LineChartView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public DefaultCategoryDataset dataset;
 	public ChartPanel panel;
-
+	
+	/**
+	 * Creates a dataset, categoryPlot and a categoryAxis. These are all needed to create a line chart using JFreeChart
+	 */
 	public LineChartView() {
 		// Create dataset
 		dataset = createDataset();
@@ -36,7 +46,10 @@ public class LineChartView extends JPanel {
 		
 		panel = new ChartPanel(chart);
 	}
-
+	/**
+	 * Creates a empty dataset
+	 * @return DefaultCategoryDataset
+	 */
 	private DefaultCategoryDataset createDataset() {
 	    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
