@@ -11,7 +11,7 @@ import controller.PlaySongController;
 import view.MainView;
 
 /**   
- * explain here what this class does
+ * This class updates all values every tick and makes the program run.
  * 
  * @author danielgeerts7
  * @version 22-01-2018
@@ -77,6 +77,15 @@ public class Model extends Thread{
 	// All views that are used in this application
 	public MainView mainView;
 
+	/**
+	 * Creates a Model for updating all the values.
+	 * @param specialDays A HashMap which contains the special days.
+	 * @param values The HashMap which contains all values for running the simulator.
+	 * @param ApplicationTitle The title of the window.
+	 * @param pricetoPayperMinuteWhenParked The price that is payed per minute for ticket holders.
+	 * @param fullscreen Boolean whether or not the screen should be full screen.
+	 * @param playSound If the sound track gets played.
+	 */
 	public Model(HashMap<Integer, SpecialDay> specialDays, HashMap<String, Integer> values, String ApplicationTitle, double pricetoPayperMinuteWhenParked,boolean fullscreen, boolean playSound) {
 		entranceCarQueue = new CarQueue();
 		entrancePassQueue = new CarQueue();
@@ -116,7 +125,9 @@ public class Model extends Thread{
 		mainView = new MainView(this, ApplicationTitle, fullscreen, numberOfFloors, numberOfRows, numberOfPlaces);
 	}
 
-
+	/**
+	 * Makes the simulator run.
+	 */
 	public void run(){
 		while (running) {
 			synchronized (pauseLock) {
@@ -145,11 +156,15 @@ public class Model extends Thread{
 		}
 
 	}
-
+	/**Pauses the simulator.
+	 * **/
 	public void pauseSimulator() {
 		paused = true;
 	}
-
+	
+	/**Resumes the simulator.
+	 * @param playSound Boolean to play the music or not.
+	 * **/
 	public void resumeSimulator(boolean playSound) {
 		if (paused) {
 			synchronized (pauseLock) {
@@ -165,6 +180,9 @@ public class Model extends Thread{
 	
 	private int counter = 0;
 
+	/**Every time this method is called all parts of the simulator will be updated.
+	 * @param withSleep Boolean to let the simulator sleep for a while.
+	 * **/
 	private void tick(boolean withSleep) {
 		advanceTime();
 		updateCarTime();
@@ -193,7 +211,9 @@ public class Model extends Thread{
 	}
 	
 	private int hundredCounter = 0;
-
+	
+	/**Performs the method tick a hundred times.
+	 * **/
 	public void tickHundredTimes() {
 		for (int i = 1; i <= 100; i++) {
 			tick(false);
@@ -205,6 +225,8 @@ public class Model extends Thread{
 		}
 	}
 
+	/**Updates the places of the cars.
+	 * **/
 	private void updateCarTime() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for(int row= 0; row < getNumberOfRows(); row++) {
@@ -218,19 +240,24 @@ public class Model extends Thread{
 			}
 		}
 	}
-
+	/** Handles all the cars that are entering the parking garage.
+	 * **/
 	private void handleEntrance(){
 		carsArriving();
 		carsEntering(getEntrancePassQueue());
 		carsEntering(getEntranceCarQueue());
 	}
-
+	
+	/** Handles all the cars leaving the parking garage.
+	 * **/
 	private void handleExit(){
 		carsReadyToLeave();
 		carsPaying();
 		carsLeaving();
 	}
 
+	/** Calculates the amount of money that gets made per tick and calculates the expected amount of money to be made.
+	 * **/
 	private void calculateMoney() {
 		expectedMoneyToBeMade = 0;
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
@@ -246,6 +273,9 @@ public class Model extends Thread{
 		}
 	}
 
+	/**
+	 * Add cars to every queue.
+	 */
 	private void carsArriving(){		
 
 		int numberOfCars = getNumberOfCars(getWeekDayArrivals(), getWeekendArrivals()) * (enactModifier(entranceCarQueue.carsInQueue())/100);
@@ -259,7 +289,14 @@ public class Model extends Thread{
 
 
 	}
-
+	
+	/** If there are too many cars waiting in the queue then this modifier will be enacted 
+	 * to prevent more cars from getting in the queue.
+	 * 
+	 * @param q The amount of cars sitting in the queue.
+	 * @return A value on a scale of 0 to 100 which will be divided by 100 to get a percentage 
+	 * of the normal amount of cars that would've entered.
+	 * **/
 	private int enactModifier(int q) {
 		if (q > 12) {
 			return 0;
@@ -274,7 +311,10 @@ public class Model extends Thread{
 			return 100;
 		}
 	}
-
+	
+	/** Gets the cars in the queue and assigns them to a parking spot.
+	 * @param queue The queue from which the cars will be pulled out of.
+	 * **/
 	private void carsEntering(CarQueue queue){
 		int i=0;
 		// Remove car from the front of the queue and assign to a parking space.
@@ -302,6 +342,8 @@ public class Model extends Thread{
 		}
 	}
 
+	/** Adds cars to a queue that will leave the parking garage.
+	 * **/
 	private void carsReadyToLeave(){
 		// Add leaving cars to the payment queue.
 		Car car = getFirstLeavingCar();
@@ -316,7 +358,9 @@ public class Model extends Thread{
 			car = getFirstLeavingCar();
 		}
 	}
-
+	
+	/** Removes cars from the queue to pay and adds the money to the revenue.
+	 * **/
 	private void carsPaying(){
 		// Let cars pay.
 		int i = 0;
@@ -340,7 +384,9 @@ public class Model extends Thread{
 			i++;
 		}
 	}
-
+	
+	/** Removes cars from the ExitCarQueue.
+	 * */
 	private void carsLeaving(){
 		// Let cars leave.
 		int i=0;
@@ -349,7 +395,11 @@ public class Model extends Thread{
 			i++;
 		}	
 	}
-
+	
+	/** Adds new cars to the car queue for entering the parking garage.
+	 * @param numberOfCars The amount of cars of a certain type that enter the garage.
+	 * @param type The type of car.
+	 * **/
 	private void addArrivingCars(int numberOfCars, String type){
 		// Add the cars to the back of the queue.
 		switch(type) {
@@ -370,12 +420,20 @@ public class Model extends Thread{
 			break;
 		}
 	}
-
+	
+	/** Removes the car from a spot and adds it to the exit queue.
+	 * @param car The car that leaves.
+	 * **/
 	private void carLeavesSpot(Car car){
 		removeCarAt(car.getLocation());
 		getExitCarQueue().addCar(car);
 	}
 
+	/** Sets a car at a spot and return a boolean based on the success of the operation.
+	 * @param location The location that is assigned to a spot.
+	 * @param car The car that gets assigned to the location.
+	 * @return A boolean based on if the car has been set to the location.
+	 * **/
 	public boolean setCarAt(Location location, Car car) {
 		if (!locationIsValid(location)) {
 			return false;
@@ -397,6 +455,10 @@ public class Model extends Thread{
 		return false;
 	}
 	
+	/** Checks if a car is able to double park and then based on a random value park it double.
+	 * @param loc The location on where the car will be double parked.
+	 * @param car The car that may be parked double.
+	 * **/
 	private void checkIfCarIsDubbleParked(Location loc, Car car) {
 		Random r = new Random();
 		// Random int between zero and 60 minutes
@@ -415,7 +477,10 @@ public class Model extends Thread{
 			}
 		}
 	}
-
+	
+	/** Removes a car at a location.
+	 * @param location The location that will be set to null.
+	 * **/
 	public void removeCarAt(Location location) {
 		if (!locationIsValid(location)) {
 			return;
@@ -437,7 +502,10 @@ public class Model extends Thread{
 		numberOfOpenSpotsPlusOne();
 		car = null;
 	}
-
+	
+	/** Determines the next free location where a car can park.
+	 * @return The first free location.
+	 * **/
 	public Location getFirstFreeLocation() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows();row++){
@@ -454,6 +522,10 @@ public class Model extends Thread{
 		}
 		return null;
 	}
+	
+	/** Determines the first free location for pass holders.
+	 * @return The location where the first free location is.
+	 * **/
 	public Location getFirstFreeLocationPass() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows(); row++) {
@@ -468,6 +540,9 @@ public class Model extends Thread{
 		return null;
 	}
 
+	/** Searches for cars to leave.
+	 * @return The car that will leave.
+	 * **/
 	public Car getFirstLeavingCar() {
 		for (int floor = 0; floor < getNumberOfFloors(); floor++) {
 			for (int row = 0; row < getNumberOfRows(); row++) {
@@ -483,6 +558,10 @@ public class Model extends Thread{
 		return null;
 	}
 
+	/** Determines whether or not a location is taken or not.
+	 * @param location The location that gets checked if it is a good parking spot.
+	 * @return A boolean that is based on if this location is available for parking.
+	 * **/
 	private boolean locationIsValid(Location location) {
 		if (location == null) {
 			return false;
@@ -496,6 +575,11 @@ public class Model extends Thread{
 		return true;
 	}
 
+	/** Gets the number of cars that enter per minute.
+	 * @param weekDay The peak amount of cars that enter per hour on workdays.
+	 * @param weekend The peak amount of cars that enter per hour in the weekend.
+	 * @param The number of cars that enter per minute.
+	 * **/
 	public int getNumberOfCars(int weekDay, int weekend){
 		Random random = new Random();
 		
@@ -520,99 +604,181 @@ public class Model extends Thread{
 		return (int)Math.round(numberOfCarsPerHour / 60);	
 	}
 
-
+	/** Gets the amount of floors.
+	 * @return The amount of floors.
+	 * **/
 	public int getNumberOfFloors() {
 		return numberOfFloors;
 	}
 
+
+	/** Gets the amount of rows.
+	 * @return The amount of rows.
+	 * **/
 	public int getNumberOfRows() {
 		return numberOfRows;
 	}
 
+
+	/** Gets the amount of places.
+	 * @return The amount of places.
+	 * **/
 	public int getNumberOfPlaces() {
 		return numberOfPlaces;
 	}
 
+
+	/** Gets the amount of open spots.
+	 * @return The amount of open spots.
+	 * **/
 	public int getNumberOfOpenSpots(){
 		return numberOfOpenSpots;
 	}
 
+
+	/** Gets the amount of total cars parked today.
+	 * @return The total amount of cars that parked today.
+	 * **/
 	public int getCarsParkedToday() {
 		return carsParkedToday;
 	}
 
+
+	/** The money made on a single day.
+	 * @return The amount of money that is made on a single day.
+	 * **/
 	public long getDailyRevenue() {
 		return dailyRevenue;
 	}
 
+
+	/** Gets the amount of cars that have been parked with a parking pass on a single day.
+	 * @return How many cars that have been parked with a parking pass on a single day.
+	 * **/
 	public int getDailyParkingPassCar() {
 		return dailyParkingPassCar;
 	}
 
+
+
+	/** Gets the amount of cars that have been parked on a reserved parking spot on a single day.
+	 * @return How many cars that have been parked on a reserved parking spot on a single day.
+	 * **/
 	public int getDailyReservCar() {
 		return dailyReservCar;
 	}
 
+
+	/** Gets the amount of cars that have been parked with a ticket on a single day.
+	 * @return How many cars that have been parked with a ticket on a single day.
+	 * **/
 	public int getDailyAdHocCar() {
 		return dailyAdHocCar;
 	}
 
+	/** Gets the queue for the entrance for people with tickets.
+	 * @return returns the CarQueue for people entering the garage with a ticket.
+	 * **/
 	public CarQueue getEntranceCarQueue() {
 		return entranceCarQueue;
 	}
 
+	/** Gets the queue for the entrance for people with parking pass.
+	 * @return returns the CarQueue for people entering the garage with a parking pass.
+	 * **/
 	public CarQueue getEntrancePassQueue() {
 		return entrancePassQueue;
 	}
 
+	/** Gets the queue for people leaving that have to pay at the exit.
+	 * @return returns the CarQueue for people leaving that have to pay at the exit.
+	 * **/
 	public CarQueue getPaymentCarQueue() {
 		return paymentCarQueue;
 	}
 
+	/** Gets the queue for people leaving that don't have to pay at the exit.
+	 * @return returns the CarQueue for people leaving that don't have to pay at the exit.
+	 * **/	
 	public CarQueue getExitCarQueue() {
 		return exitCarQueue;
 	}
 
+	/** Gets the amount of cars that can enter per minute.
+	 * @return returns the amount of cars that can enter per minute.
+	 * **/
 	public int getEnterSpeed() {
 		return enterSpeed;
 	}
 
+	/** Gets the amount of cars that can pay per minute.
+	 * @return returns the amount of cars that can pay per minute.
+	 * **/
 	public int getPaymentSpeed() {
 		return paymentSpeed;
 	}
 
+	/** Gets the amount of cars that can leave per minute.
+	 * @return returns the amount of cars that can leave per minute.
+	 * **/
 	public int getExitSpeed() {
 		return exitSpeed;
 	}
 
+	/** Gets the amount of cars with tickets that enter at peak on week days.
+	 * @return returns the amount of cars with tickets that enter on week days.
+	 * **/
 	public int getWeekDayArrivals() {
 		return weekDayArrivals;
 	}
 
+	/** Gets the amount of cars that enter at peak hour with tickets in the weekend.
+	 * @return returns the amount of cars that enter with tickets in the weekend.
+	 * **/
 	public int getWeekendArrivals() {
 		return weekendArrivals;
 	}
 
+	/** Gets the amount of pass holders that enter at peak hour on week days.
+	 * @return returns the amount of pass holders at peak hour that enter on week days.
+	 * **/
 	public int getWeekDayPassArrivals() {
 		return weekDayPassArrivals;
 	}
-
+	
+	/** Gets the amount of pass holders that enter at peak hour in the weekend.
+	 * @return returns the amount of pass holders at peak hourthat enter in the weekend.
+	 * **/
 	public int getWeekendPassArrivals() {
 		return weekendPassArrivals;
 	}
-
+	
+	/** Gets the amount of cars with a reservation that enter at peak hour on weekdays.
+	 * @return returns the amount of cars with a reservation at peak hour that enter on weekdays.
+	 * **/
 	public int getWeekDayReservArrivals() {
 		return weekDayReservArrivals;
 	}
 
+	/** Gets the amount of cars with a reservation that enter at peak hour in the weekend.
+	 * @return returns the amount of cars with a reservation at peak hour that enter in the weekend.
+	 * **/
 	public int getWeekendReservArrivals() {
 		return weekendReservArrivals;
 	}
 
+	/** Gets an array with cars with a location.
+	 * @return returns an array with cars.
+	 * **/
 	public Car[][][] getCars() {
 		return cars;
 	}
 
+	/** Gets a car from an location.
+	 * @param loc The location where the car will be pulled from.
+	 * @param drawing A boolean that determines if a car is double parked.
+	 * @return The car that is on the given location.
+	 * **/
 	public Car getCarAt(Location loc, boolean drawing) {
 		Location oldLoc = new Location(loc.getFloor(), loc.getRow(), loc.getPlace()-1);
 		
@@ -630,18 +796,32 @@ public class Model extends Thread{
 		return cars[loc.getFloor()][loc.getRow()][loc.getPlace()];
 	}
 
+	/** Puts a car into an array with the given properties.
+	 * @param floor The floor on which the car will be parked.
+	 * @param row The row on which the car will be parked.
+	 * @param place The place where the car will be parked.
+	 * **/
 	public void setCarAt(int floor, int row, int place, Car car) {
 		cars[floor][row][place] = car;
 	}
 
+	/**
+	 * Downs the number of open spots by 1.
+	 */
 	public void numberOfOpenSpotsMinusOne() {
 		numberOfOpenSpots--;    	
 	}
-
+	
+	/**
+	 * Ups the number of open spots by 1.
+	 */
 	public void numberOfOpenSpotsPlusOne() {
 		numberOfOpenSpots++;    	
 	}
 
+	/**
+	 * Lets one minute pass by and changes the hours and days accordingly.
+	 */
 	public void advanceTime() {
 		// Advance the time by one minute.
 		minute++;
@@ -660,6 +840,9 @@ public class Model extends Thread{
 		}
 	}
 
+	/**
+	 * Pauses the thread for 1 second.
+	 */
 	public void pauseThread() {
 		try {
 			Thread.sleep(1000);
@@ -714,6 +897,10 @@ public class Model extends Thread{
 		return completeStr;
 	}
 
+	/**
+	 * Turns the number of a day into a string.
+	 * @return The day in the form of a string.
+	 */
 	public String getCurrentDay() {
 		String currentDay = "";
 
@@ -728,7 +915,7 @@ public class Model extends Thread{
 		break;
 		case 4:  currentDay = "Friday";
 		break;
-		case 5:  currentDay = "Saterday";
+		case 5:  currentDay = "Saturday";
 		break;
 		case 6:  currentDay = "Sunday";
 		break;
@@ -756,6 +943,10 @@ public class Model extends Thread{
 		return amountOfCars;
 	}
 
+	/**
+	 * Updates the line chart.
+	 * @param hundredTicks Boolean if it needs to update a hundred ticks.
+	 */
 	public void updateLineChart(boolean hundredTicks) {
 		if (!hundredTicks) {
 			pauseSimulator();
@@ -768,6 +959,9 @@ public class Model extends Thread{
 		}
 	}
 
+	/**
+	 * Updates the pie chart.
+	 */
 	public void updatePieChart() {
 		pauseSimulator();
 		mainView.pieChartView.dataset.setValue("Paying cars", getCurrentCarsParkedOfClass(AdHocCar.class));

@@ -10,20 +10,18 @@ import controller.Controller;
 import model.Model;
 import model.SpecialDay;
 
+/**	The window that pops up when the program starts and sets the values for the simulator.
+ * 	
+ *@author Erik Storm
+ *@version 5-2-2018
+ * **/
 
 public class StartWindow extends JFrame {
 	
 	private HashMap<String, Integer> values;
 	private HashMap<Integer, SpecialDay> specialDays;
 	private String[] daysOfTheWeek = new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-	
 	private ArrayList<JFormattedTextField> numberFields;
-	/*
-	private String[] variables = new String[] {"floors", "rows", "places", "days", "hours", "minutes", "enterSpeed", "paymentSpeed"
-			, "exitSpeed", "weekDayArrivals", "weekendArrivals", "weekDayPassArrivals", "weekendPassArrivals"};
-	
-	private HashMap<String, JFormattedTextField> fields;
-	*/
 	
 	private Container contentPane;
 	private JPanel inputPanel;
@@ -115,7 +113,7 @@ public class StartWindow extends JFrame {
 		
 		floors = createInput(3, 1, 0, inputPanel);
 		rows = createInput(6, 1, 1, inputPanel);
-		places = createInput(30, 1, 2, inputPanel);
+		places = createInput(28, 1, 2, inputPanel);
 
 		createLabel("Starting day: ", 2, 0, inputPanel);
 		createLabel("Starting hour: ", 2, 1, inputPanel);
@@ -185,6 +183,8 @@ public class StartWindow extends JFrame {
 		createSpecialDayEditor();
 	}	
 	
+	/**creates the view for making special days.
+	 * **/
 	public void createSpecialDayEditor() {
 		//setting up the panel and adding +1 to day.
 		JPanel specialPanel = new JPanel();
@@ -206,8 +206,10 @@ public class StartWindow extends JFrame {
 		contentPane.add(specialPanel, BorderLayout.SOUTH);
 	}
 	
+	/**When this method is called all the specialdayview will be updated to display the new information.
+	 * @param index The index that needs to be updated.
+	 * **/
 	public void updateSpecialDay(Integer index) {
-		
 		if (!specialDays.containsKey(index)) {
 			hour.setValue(0);
 			intensity.setValue(0);	
@@ -221,6 +223,9 @@ public class StartWindow extends JFrame {
 		msg.setText("");
 	}
 	
+	/**Deletes the special day that is selected in the dayPicker.
+	 * @param index the index of the special day that will be deleted.
+	 * **/
 	public void deleteSpecialDay(Integer index) {
 		if(specialDays.containsKey(index)) {
 			specialDays.remove(index);
@@ -232,6 +237,10 @@ public class StartWindow extends JFrame {
 		}
 	}
 	
+	/**Updates the daypicker to display the correct information about the special days.
+	 * @param index the index that needs to be updated.
+	 * 
+	 * **/
 	public void updateDayPicker(Integer index) {
 		dayPicker.removeItemAt(index);
 		if(specialDays.containsKey(index)) {
@@ -242,6 +251,9 @@ public class StartWindow extends JFrame {
 		dayPicker.setSelectedIndex(index);
 	}
 	
+	/**Adds a special day to the HashMap specialDays and updates the view so it displays the correct information.
+	 * @param index the index on which the new special day will be added to.
+	 * **/
 	public void addSpecialDay(Integer index) {
 		int d = dayPicker.getSelectedIndex();
 		int h = (int)hour.getValue();
@@ -259,6 +271,9 @@ public class StartWindow extends JFrame {
 		}
 	}
 	
+	/**Changes information of the selected index to the new input information.
+	 * @param index the index of the day that will be changed.
+	 * **/
 	public void changeSpecialDay(Integer index) {
 		int h = (int)hour.getValue();
 		int i = (int)intensity.getValue();
@@ -275,16 +290,26 @@ public class StartWindow extends JFrame {
 		}
 	}
 	
+	/**Displays a positive message in a green colour.
+	 * @param text The text that gets displayed.
+	 * **/
 	public void displayPositiveMessage(String text) {
 		msg.setForeground(new Color(0, 160, 0));
 		msg.setText(text);
 	}
 	
+	/**Displays a negative message in a red colour.
+	 * @param text The text that gets displayed.
+	 * **/
 	public void displayNegativeMessage(String text) {
 		msg.setForeground(Color.RED);
 		msg.setText(text);
 	}
 	
+	/**This method will be called when the start button has been clicked
+	 * so the simulator can run with the right information.
+	 * This window will then be disposed because of no further need.
+	 * **/
 	public void start() {
 		insertIntoHashMap();
 		Model m = new Model(specialDays, values, parkingGarageName.getText(), (Double)pricetoPayperMinuteWhenParked.getValue(), fullscreen.isSelected() ,playMusic.isSelected());
@@ -294,6 +319,9 @@ public class StartWindow extends JFrame {
 		dispose();
 	}
 	
+	/**Puts the values of all fields into a HashMap so it can be given to
+	 * the constructor of the model in a cleaner way.
+	 * **/
 	public void insertIntoHashMap(){
 
 		values.put("floors", (int)floors.getValue());
@@ -315,11 +343,12 @@ public class StartWindow extends JFrame {
 		values.put("weekDayReservArrivals", (int)weekDayReservArrivals.getValue());
 		values.put("weekendReservArrivals", (int)weekendReservArrivals.getValue());	
 	}
-	
+	/** Resets all fields and buttons to its original state.
+	 * **/
 	public void reset() {
 		floors.setValue(3);
 		rows.setValue(6);
-		places.setValue(30);
+		places.setValue(28);
 		
 		days.setValue(0);
 		hours.setValue(0);
@@ -336,7 +365,7 @@ public class StartWindow extends JFrame {
 		weekDayReservArrivals.setValue(80);
 		weekendReservArrivals.setValue(160);
 		
-		fullscreen.setSelected(false);
+		fullscreen.setSelected(true);
 		playMusic.setSelected(false);
 		
 		pricetoPayperMinuteWhenParked.setValue(0.015);
@@ -428,6 +457,7 @@ public class StartWindow extends JFrame {
 	/**Creates an empty box so the layout looks better.
 	 * @param x the x value of the grid position.
 	 * @param y the y value of the grid position. 
+	 * @param panel The panel on which the object will be put.
 	 * **/
 	public void createBox(int x, int y, JPanel panel) {
 		grid.gridx = x;
@@ -469,7 +499,15 @@ public class StartWindow extends JFrame {
 		panel.add(textField, grid);
 		return textField;
 	}
-	
+
+	/**Creates a checkbox with an x and y value for the grid.
+	 * @param text The text that gets put next to the checkbox.
+	 * @param selected Boolean to set if the box needs to start checked or not.
+	 * @param x the x value of the grid position.
+	 * @param y the y value of the grid position. 
+	 * @param panel the panel on which the object will be put.
+	 * @return returns the checkbox.
+	 * **/
 	public JCheckBox createCheckBox(String text, boolean selected, int x, int y, JPanel panel) {
 		grid.gridx = x;
 		grid.gridy = y;
