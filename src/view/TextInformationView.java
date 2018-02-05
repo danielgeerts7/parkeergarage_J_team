@@ -28,6 +28,9 @@ public class TextInformationView extends JPanel {
 	// Info label of current parked cars
 	private static JLabel currentParkedTotalCarsLabel, currentParkedPayingCarsLabel, currentParkedPassholderCarsLabel,currentParkedReservCarsLabel ;
 
+	private static JLabel missedCarsTitle, missedCarsLabel;
+
+	
 	private static JLabel dailyAdHocCarTitle, dailyParkingPassCarTitle, dailyReservCarTitle, carsParkedTodayTitle, dailyAdHocCarLabel, dailyParkingPassCarLabel, dailyReservCarLabel, carsParkedTodayLabel;
 	private static JLabel earnedMoneyTitle, expectedToBeEarnedMoneyTitle, dailyRevenueTitle, earnedMoney, expectedToBeEarnedMoney, dailyRevenueLabel;
 
@@ -63,6 +66,9 @@ public class TextInformationView extends JPanel {
 		currentParkedPayingCarsLabel = new JLabel("");
 		currentParkedPassholderCarsLabel = new JLabel("");
 		currentParkedReservCarsLabel = new JLabel("");
+		
+		missedCarsTitle = new JLabel("Total missed customers: ");
+		missedCarsLabel = new JLabel("");
 
 		// Daily type title
 		dailyAdHocCarTitle = new JLabel("Daily regular customers: ");
@@ -130,7 +136,7 @@ public class TextInformationView extends JPanel {
 		this.add(currentParkedTotalCarsLabel, c);
 
 
-		// add car Queue information
+		// add average cars information
 		c.gridx = 5;
 		c.gridy = 1;
 		this.add(dailyAdHocCarTitle, c);
@@ -150,20 +156,24 @@ public class TextInformationView extends JPanel {
 		c.gridy = 4;
 		this.add(carsParkedTodayLabel, c);
 
-		// add car Queue information
+		// add earned money information
 		c.gridx = 7;
 		c.gridy = 1;
-		this.add(earnedMoneyTitle, c);
+		this.add(missedCarsTitle, c);
 		c.gridy = 2;
-		this.add(expectedToBeEarnedMoneyTitle, c);
+		this.add(earnedMoneyTitle, c);
 		c.gridy = 3;
+		this.add(expectedToBeEarnedMoneyTitle, c);
+		c.gridy = 4;
 		this.add(dailyRevenueTitle, c);
 		c.gridx = 8;
 		c.gridy = 1;
-		this.add(earnedMoney, c);
+		this.add(missedCarsLabel, c);
 		c.gridy = 2;
-		this.add(expectedToBeEarnedMoney, c);
+		this.add(earnedMoney, c);
 		c.gridy = 3;
+		this.add(expectedToBeEarnedMoney, c);
+		c.gridy = 4;
 		this.add(dailyRevenueLabel, c);
 	}
 
@@ -187,6 +197,8 @@ public class TextInformationView extends JPanel {
 		currentParkedPayingCarsLabel.setText(Integer.toString(parkedAdHocCars));
 		currentParkedPassholderCarsLabel.setText(Integer.toString(parkedPassholderCars));
 		currentParkedReservCarsLabel.setText(Integer.toString(currentParkedReservCars));
+		
+		missedCarsLabel.setText(Integer.toString(model.getTotalMissedCars()));
 
 		// Update cars in queue information
 		dailyAdHocCarLabel.setText(Integer.toString(model.getDailyAdHocCar()));
@@ -200,6 +212,6 @@ public class TextInformationView extends JPanel {
 		// Something with price and the expected price
 		earnedMoney.setText(euroSign + " " + model.getEarnedMoney() + ".00 ,-");
 		expectedToBeEarnedMoney.setText(euroSign + " " + model.getExpectedMoneyToBeEarned() + ".00 ,-");
-		dailyRevenueLabel.setText(euroSign + model.getDailyRevenue() + ".00 ,-");
+		dailyRevenueLabel.setText(euroSign + " " + model.getDailyRevenue() + ".00 ,-");
 	}
 }
