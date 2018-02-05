@@ -15,6 +15,7 @@ import model.DoubleParkedCar;
 import model.Location;
 import model.Model;
 
+
 public class CarParkView extends JPanel {
 
 	private Dimension size;
@@ -56,7 +57,7 @@ public class CarParkView extends JPanel {
 	}
 
 	/**
-	 * Overriden. The car park view component needs to be redisplayed. Copy the
+	 * Overridden. The car park view component needs to be redisplayed. Copy the
 	 * internal image to screen.
 	 */
 	public void paintComponent(Graphics g) {

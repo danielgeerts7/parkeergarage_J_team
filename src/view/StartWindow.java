@@ -113,7 +113,7 @@ public class StartWindow extends JFrame {
 		
 		floors = createInput(3, 1, 0, inputPanel);
 		rows = createInput(6, 1, 1, inputPanel);
-		places = createInput(28, 1, 2, inputPanel);
+		places = createInput(30, 1, 2, inputPanel);
 
 		createLabel("Starting day: ", 2, 0, inputPanel);
 		createLabel("Starting hour: ", 2, 1, inputPanel);
@@ -348,7 +348,7 @@ public class StartWindow extends JFrame {
 	public void reset() {
 		floors.setValue(3);
 		rows.setValue(6);
-		places.setValue(28);
+		places.setValue(30);
 		
 		days.setValue(0);
 		hours.setValue(0);
