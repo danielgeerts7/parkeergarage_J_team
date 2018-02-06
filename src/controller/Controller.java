@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import model.Model;
 
@@ -62,11 +65,10 @@ public class Controller extends AbstractController {
 	 * Save some information to a external file
 	 */
 	public void save() {
-		Random random = new Random();
-		int randomNumber = random.nextInt(1000);
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
+		Date date = new Date();
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-
-				new FileOutputStream("Java-Simulaties/StatisJavasimulator-" + randomNumber + ".html"), "utf-8"))) {
+				new FileOutputStream("SimulationSaves/StatisJavasimulator_" + dateFormat.format(date) + ".html"), "utf-8"))) {
 			writer.write("<h1>Statisics: </h1><br>" + "Day: "+ model.getCurrentDay() + ", Time: " + model.getTime()+ "<br>");
 			writer.write("Total Money earned this week: " + Long.toString(model.getEarnedMoney())+" euro"+ "<br>");
 			writer.write("Money earned this day: " + Long.toString(model.getDailyRevenue())+ " euro<br>");
